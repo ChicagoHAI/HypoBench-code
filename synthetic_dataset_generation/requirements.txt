@@ -1,0 +1,7 @@
+openai
+weave
+wandb
+numpy
+pandas
+scikit-learn
+matplotlib
