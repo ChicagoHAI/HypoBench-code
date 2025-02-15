@@ -1,7 +1,7 @@
 from typing import List, Tuple, Dict
 import json
 import os
-from .model import GPT4
+from model import GPT4
 from concurrent.futures import ThreadPoolExecutor
 import weave
 SELF_CONSISTENCY = 5
@@ -191,7 +191,7 @@ Labels:
 The data template must leave blankspaces for filling the set of phrase types shown below: 
 {phrase_types}
 
-Generate {num_templates} textual templates that can be used to create synthetic text data following the instructions provided in the system prompt.
+Generate {num_templates} textual templates that can be used to create synthetic text data following the instructions provided in the system prompt. All templates must include placeholders for ALL the provided phrase types.
 A response format will be provided. Remember to mark all the blankspaces in the template with the phrase type provided by the user and square brackets to indicate the placeholder. """
 
 template_generation_response_format = {

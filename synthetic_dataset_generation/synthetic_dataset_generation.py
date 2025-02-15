@@ -31,7 +31,8 @@ The pipeline should include the following:
     (e.g, suppose we have 5 features and 2 labels, then we would have 32 possible feature enumerations, and each one should be assigned to one label. )
 5. A comprehensive pipeline that combines all above components
 """
-from .model import GPT4
+from model import GPT4
+
 from .synthetic_dataset_prompting import *
 import os
 import json
@@ -46,7 +47,7 @@ import pandas as pd
 from copy import copy
 
 class SyntheticDatasetGenerator:
-    def __init__(self, init_task_description: str, output_path: str, 
+    def __init__(self, init_task_description: str, output_path: str, task_name: str, 
                  num_templates: int, num_phrases: int, num_gaps_per_template: Tuple[int, int],# lower and upper bound
                  num_labels: int, 
                  feature_generation_model: GPT4, text_generation_model: GPT4,
@@ -55,6 +56,7 @@ class SyntheticDatasetGenerator:
         os.mkdir(os.path.dirname(output_path)) if not os.path.exists(os.path.dirname(output_path)) else None
         self.clf_model = LogisticRegression(multi_class="multinomial")  # realizing what we need is a randomly defined model, providing data and training might lead to undesirable models due to noisy data. 
         self.num_templates = num_templates
+        self.task_name = task_name
         self.num_gaps_per_template = num_gaps_per_template
         self.num_phrases = num_phrases
         self.feature_generation_model = feature_generation_model
@@ -204,10 +206,11 @@ class SyntheticDatasetGenerator:
                 del self.templates[template]
         # could consider performing a saving operation here.
         with open(f"{os.path.dirname(self.output_path)}/metadata.json", "w") as f:
-            json.dump({"task_description": task_description, "labels": labels, 
+            json.dump({"task_name": self.task_name, "task_description": task_description, "labels": labels, 
                        "num_templates": self.num_templates, "num_gap_per_template": self.num_gaps_per_template, 
                        "num_labels": self.num_labels, "num_phrases": self.num_phrases,
-                       "phrase_types": phrase_types, "features": phrases, "templates": self.templates}, f)
+                       "phrase_types": phrase_types, "features": phrases, "templates": self.templates
+                       }, f)
         return response_json["reasoning"], self.templates
 
     @weave.op()
@@ -273,6 +276,7 @@ class SyntheticDatasetGenerator:
         # save templates
         with open(f"{os.path.dirname(self.output_path)}/metadata.json", "w") as f:
             json.dump({"task_description": task_description, "labels": labels, 
+                       "task_name": self.task_name,
                        "num_templates": self.num_templates, "num_gap_per_template": self.num_gaps_per_template, 
                        "phrase_types": phrase_types, "features": phrases, "templates": self.templates}, f)
             
@@ -313,6 +317,7 @@ class SyntheticDatasetGenerator:
         self.num_gaps_per_template = metadata["num_gap_per_template"]
         self.features = metadata["features"]
         self.templates = metadata["templates"]
+        self.task_name = metadata["task_name"]
         self.dataset = None
 
     def construct_text_from_templates(self, templates: Dict[str, Dict[str, List[str]]], clf_model = None):
@@ -392,8 +397,10 @@ class SyntheticDatasetGenerator:
             input_array = np.zeros((1, len(self.templates) + sum(len(phrases) for phrases in self.features.values())))
             # handle templates
             input_array[0, feature_array[0]] = 1
+            blank_features = [self.features[key][feature_array[1:][idx]] for idx, key in enumerate(phrase_type_keys)] # this outputs the set of selected features in the form of a text. 
             # handle phrases respectively; need to know the starting point of each phrase type in the input_array. 
             curr_idx = len(self.templates)
+            
             for k, phrase_idx in enumerate(phrase_types_arr):
                 input_array[0, curr_idx + phrase_idx] = 1
                 curr_idx += len(self.features[phrase_type_keys[k]])
@@ -401,9 +408,11 @@ class SyntheticDatasetGenerator:
             label = self.clf_model.predict(input_array)
             generated_texts.append({
                 "text": text,
-                "label": str(label[0]),
+                "template": template_str,
+                "blank_features": blank_features,
                 "feature_idx_array": feature_array,
                 "np_input_array": input_array.tolist(), 
+                "label": str(label[0]).lower(),
             })
             return
         else:
@@ -414,19 +423,37 @@ class SyntheticDatasetGenerator:
                 self.construct_template_recursive(templates, template_str, new_feature_array, curr_idx + 1, generated_texts)
             return
 
-    def convert_to_huggingface(self, data_path: str = ""):
+    def convert_to_huggingface(self, data_path: str = "", task_name: str = "", train_val_test_ratio: Tuple[float, float, float] = (0.7, 0.2, 0.1)):
         if data_path == "":
             data_path = self.output_path
+        if task_name == "":
+            task_name = self.task_name
         data = json.load(open(data_path, "r"))
+        # shuffle the data
+        random.shuffle(data)
+        # split the data
+        train_data = data[:int(len(data) * train_val_test_ratio[0])]
+        val_data = data[int(len(data) * train_val_test_ratio[0]): int(len(data) * (train_val_test_ratio[0] + train_val_test_ratio[1]))]
+        test_data = data[int(len(data) * (train_val_test_ratio[0] + train_val_test_ratio[1])):]
         """
         to convert into hugging face format, it should be a dict with keys being variable names, and values being lists of data.
-        """
         key_names = data[0].keys()
         hf_data = {key: [] for key in key_names}
         for entry in data:
             for key in key_names:
                 hf_data[key].append(entry[key])
-        with open(f"{os.path.dirname(data_path)}/hf_{os.path.basename(data_path)}", "w") as f:
+        
+        with open(f"{os.path.dirname(data_path)}/{os.path.basename(data_path)}", "w") as f:
             json.dump(hf_data, f)
         return hf_data
+        
+        """
+        tmp_dict = {"train": train_data, "val": val_data, "test": test_data}
+        for set_name, set_data in tmp_dict.items():
+            hf_data = {key: [] for key in set_data[0].keys()}
+            for entry in set_data:
+                for key in hf_data.keys():
+                    hf_data[key].append(entry[key])
+            with open(f"{os.path.dirname(data_path)}/{task_name}_{set_name}.json", "w") as f:
+                json.dump(hf_data, f)
     
