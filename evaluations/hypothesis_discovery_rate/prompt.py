@@ -1,43 +1,58 @@
-import json
+from typing import Dict, List
+from hypogenic.algorithm.summary_information import SummaryInformation
 
-def build_variable_discovery_prompt(gold_variables, generated_hypothesis):
-    prompt = f"""\
-You are an assistant that evaluates discovered features in a generated hypothesis.
-Gold (true) variables: {gold_variables}
-Generated hypothesis: {generated_hypothesis}
-Please list out the variables from the generated hypothesis in a JSON list, e.g.:
-["A", "B", "C"]
-No extra text.
-"""
-    return prompt
+# System prompt for all evaluations
+SYSTEM_PROMPT = """You are an expert evaluator of hypotheses about relationships between variables and target labels. 
+Your task is to carefully analyze hypotheses and provide precise evaluations."""
 
-def build_relationship_correctness_prompt(gold_relationships, gen_relationships):
-    prompt = f"""\
-You are an assistant that rates how closely a generated relationship matches the gold relationship.
-Gold relationships: {gold_relationships}
-Generated relationships: {gen_relationships}
-Return a numeric score between 0.0 and 1.0 for each discovered feature, summarizing correctness.
-Return data in JSON format, e.g.:
-{{
-  "scores": [0.75, 0.5, 1.0]
-}}
-"""
-    return prompt
+# Templates for different evaluation tasks
+VARIABLE_MATCHING_TEMPLATE = """Compare these two hypotheses and determine if they discuss the same variable or concept:
 
-def build_variable_discovery_with_model_prompt(gold_hypothesis, generated_hypothesis):
-    """
-    Create a prompt that asks a model to output how many features overlap
-    in a subtle or non-obvious way between the gold hypothesis and the generated hypothesis.
-    """
-    prompt = f"""\
-You are an AI assistant that determines subtle feature matches between a gold hypothesis and a generated hypothesis.
-Gold hypothesis: {gold_hypothesis}
-Generated hypothesis: {generated_hypothesis}
-Please return a JSON object with:
-{{
-  "gold_feature_count": number of unique features in the gold hypothesis,
-  "matched_feature_count": number of discovered gold features in the generated hypothesis
-}}
-No extra text.
-"""
-    return prompt
+True Hypothesis: {hyp_true}
+Generated Hypothesis: {hyp_gen}
+
+Response should be exactly 'yes' or 'no'."""
+
+RELATIONSHIP_CORRECTNESS_TEMPLATE = """Rate how correctly the Generated Hypothesis captures the relationship compared to the True Hypothesis.
+
+True Hypothesis: {hyp_true}
+Generated Hypothesis: {hyp_gen}
+
+Rate from 0 to 1:
+- 1.0: Perfectly captures the relationship
+- 0.75: Mostly correct but missing some nuance
+- 0.5: Partially correct
+- 0.25: Slightly correct but mostly wrong
+- 0.0: Completely wrong or opposite relationship
+
+Provide only the numerical score (0-1)."""
+
+def create_messages(content: str) -> List[Dict[str, str]]:
+    """Create a standard message format with system and user messages."""
+    return [
+        {"role": "system", "content": SYSTEM_PROMPT},
+        {"role": "user", "content": content}
+    ]
+
+def format_prompt(template: str, hyp_true: str, hyp_gen: str) -> str:
+    """Format a template with true and generated hypotheses."""
+    return template.format(hyp_true=hyp_true, hyp_gen=hyp_gen)
+
+def get_variable_matching_prompt(hyp_true: SummaryInformation, hyp_gen: SummaryInformation) -> List[Dict[str, str]]:
+    """Generate prompt for variable matching evaluation."""
+    content = format_prompt(
+        VARIABLE_MATCHING_TEMPLATE,
+        hyp_true.hypothesis,
+        hyp_gen.hypothesis
+    )
+    return create_messages(content)
+
+def get_relationship_correctness_prompt(hyp_true: SummaryInformation, hyp_gen: SummaryInformation) -> List[Dict[str, str]]:
+    """Generate prompt for relationship correctness evaluation."""
+    content = format_prompt(
+        RELATIONSHIP_CORRECTNESS_TEMPLATE,
+        hyp_true.hypothesis,
+        hyp_gen.hypothesis
+    )
+    return create_messages(content)
+
