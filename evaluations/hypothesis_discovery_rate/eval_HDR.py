@@ -1,11 +1,17 @@
 from hypogenic.algorithm.summary_information import SummaryInformation
+from hypogenic.LLM_wrapper import (
+    GPTWrapper,
+    LLMWrapper,
+    LocalVllmWrapper,
+    llm_wrapper_register,
+)
 from typing import Dict, List, Set, Tuple
 from statistics import mean
 from .prompt import get_variable_matching_prompt, get_relationship_correctness_prompt
 
 def evaluate_pairwise_discovery(true_hyp: SummaryInformation, 
                                 gen_hyp: SummaryInformation, 
-                                api) -> Tuple[bool, float]:
+                                api: LLMWrapper) -> Tuple[bool, float]:
     """Evaluate if hypotheses match and their relationship correctness."""
     # Check if hypotheses discuss same variable
     match_messages = get_variable_matching_prompt(true_hyp, gen_hyp)
@@ -21,7 +27,7 @@ def evaluate_pairwise_discovery(true_hyp: SummaryInformation,
 
 def compute_hdr(true_hypotheses: Dict[str, SummaryInformation], 
                 generated_hypotheses: Dict[str, SummaryInformation],
-                api) -> Dict:
+                api: LLMWrapper) -> Dict:
     """Compute HDR metrics using SummaryInformation instances."""
     total_true_hyps = len(true_hypotheses)
     discovered_count = 0
