@@ -33,7 +33,9 @@
         "test": 200
     },
     
-    "ground_truth_hypothesis": "Students with A in Math and at least one publication will be admitted, otherwise rejected",
+    "ground_truth_hypotheses": [
+        "Students with A in Math and at least one publication will be admitted, otherwise rejected"
+    ],
     
     "task_properties": {
         "underlying_model": "decision_tree",

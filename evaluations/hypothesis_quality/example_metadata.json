@@ -4,7 +4,7 @@
     "task_description": "Predict whether a student will be admitted to a university based on their academic performance. This is a simplified version focusing on math grades.",
     
     "difficulty_level": 2,
-    "difficulty_description": "Single-feature decision rule with distractor features",
+    "difficulty_description": "Multi-feature disjunctive decision rule",
     
     "features": {
         "math": {
@@ -26,6 +26,11 @@
             "type": "numerical",
             "description": "Number of strong extracurricular activities",
             "possible_values": [0, 1, 2, 3]
+        },
+        "english": {
+            "type": "categorical",
+            "description": "Student's grade in English",
+            "possible_values": ["A", "B", "C", "D", "F"]
         }
     },
     
@@ -44,15 +49,25 @@
     },
     
     "ground_truth_hypotheses": [
-        "Students with an A in Math will be admitted, otherwise rejected"
+        "Students with an A in math will be admitted",
+        "Students with more than 3 publications will be admitted",
+        "Students with more than 2 recommendation letters will be admitted", 
+        "Students with more than 2 strong activities will be admitted",
+        "Students with a B or C in English will be admitted"
     ],
-    
+
+    "known_hypotheses": [
+        "Students with an A in math will be admitted",
+        "Students with an F in English are likely be rejected",
+        "Students with 0 publications are likely to be rejected"
+    ],
+
     "task_properties": {
         "underlying_model": "decision_tree",
         "balanced": true,
         "noise_level": 0,
-        "true_num_hypotheses": 1,
-        "distractor": 3,
+        "true_num_hypotheses": 5,
+        "distractor": 0,
         "depth": 1,
         "abstraction": null
     }

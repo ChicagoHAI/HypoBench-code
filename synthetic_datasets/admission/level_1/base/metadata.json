@@ -27,7 +27,9 @@
         "test": 200
     },
     
-    "ground_truth_hypothesis": "Students with an A in Math will be admitted, otherwise rejected",
+    "ground_truth_hypotheses": [
+        "Students with an A in Math will be admitted, otherwise rejected"
+    ],
     
     "task_properties": {
         "underlying_model": "decision_tree",
