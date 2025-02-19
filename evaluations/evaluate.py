@@ -5,7 +5,7 @@ import argparse
 from pathlib import Path
 from typing import Dict, List
 
-# Import different evaluation methods
+#different evaluation methods
 from hypothesis_discovery_rate.eval_HDR import evaluate_hdr
 from hypothesis_quality.eval_quality import evaluate_quality
 # TODO: Import other evaluation methods as they're implemented
