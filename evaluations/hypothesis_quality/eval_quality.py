@@ -26,14 +26,27 @@ def evaluate_aspect(hypothesis: str,
     logger.debug(f"Response: {response}")
     
     try:
-        lines = response.split('\n')
-        score = float(lines[0].split(':')[1].strip())
-        reasoning = lines[1].split(':')[1].strip()
+        # More robust parsing
+        score = None
+        reasoning = ""
         
+        for line in response.split('\n'):
+            line = line.strip()
+            if line.lower().startswith('score:'):
+                try:
+                    score = float(line.split(':', 1)[1].strip())
+                except ValueError:
+                    continue
+            elif line.lower().startswith('reasoning:'):
+                reasoning = line.split(':', 1)[1].strip()
+        
+        if score is None:
+            raise ValueError("Could not find valid score in response")
+            
         if not (1 <= score <= 5):
             raise ValueError(f"Score {score} not in range 1-5")
             
-        logger.debug(f"{aspect.capitalize()} score: {score}")
+        logger.info(f"{aspect.capitalize()} score: {score}")
         logger.debug(f"Reasoning: {reasoning}")
         return score, reasoning
         
@@ -92,12 +105,12 @@ def evaluate_quality(metadata_file: str,
     
     # Compute aggregate metrics
     for metric in ["clarity", "novelty", "plausibility"]:
-        results[f"avg_{metric}"] = mean(
-            h["scores"][metric] for h in results["hypotheses_details"]
-        )
+        avg = mean(h["scores"][metric] for h in results["hypotheses_details"])
+        results[f"avg_{metric}"] = avg
+        logger.info(f"Average {metric}: {avg:.2f}")
     
-    results["avg_overall"] = mean(
-        h["overall_score"] for h in results["hypotheses_details"]
-    )
+    avg_overall = mean(h["overall_score"] for h in results["hypotheses_details"])
+    results["avg_overall"] = avg_overall
+    logger.info(f"Average overall score: {avg_overall:.2f}")
     
     return results

@@ -4,6 +4,8 @@ import logging
 import argparse
 from pathlib import Path
 from typing import Dict, List
+import datetime
+import os
 
 #different evaluation methods
 from hypothesis_discovery_rate.eval_HDR import evaluate_hdr
@@ -12,8 +14,18 @@ from hypothesis_quality.eval_quality import evaluate_quality
 
 def setup_evaluator(args):
     """Initialize logger and LLM wrapper."""
+    log_filename = f"results/{args.log_file}_{datetime.datetime.now().strftime('%Y-%m-%d,%H-%M-%S')}.log"
+    log_folder = os.path.dirname(log_filename)
+    os.makedirs(log_folder, exist_ok=True)
+    
+    # Configure root logger first
+    LoggerConfig.setup_logger(
+        logging.DEBUG,
+        log_filename,
+    )
+    
+    # Then get the specific logger
     logger = LoggerConfig.get_logger("HypoBench - Evaluation")
-    LoggerConfig.setup_logger(logging.DEBUG)
     
     api = llm_wrapper_register.build(args.model_type)(
         model=args.model_name, 
@@ -60,6 +72,7 @@ def main():
     # Data files
     parser.add_argument('--metadata', type=str, required=True, help='Path to metadata JSON')
     parser.add_argument('--hypotheses', type=str, required=True, help='Path to hypotheses JSON')
+    parser.add_argument('--log_file', type=str, help='Path to log file')
     
     # Evaluation types
     parser.add_argument('--all', action='store_true', help='Run all evaluations')
