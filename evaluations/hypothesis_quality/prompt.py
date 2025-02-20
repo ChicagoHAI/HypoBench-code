@@ -22,12 +22,13 @@ PROMPTS = {
             "fully encapsulating its assumptions, scope, and testability."
         ),
         "user": (
-            "Evaluate the clarity of this hypothesis:\n\n"
+            "Evaluate the clarity of this hypothesis in the context of existing knowledge:\n\n"
+            "Existing Knowledge:\n{known_hypotheses}\n\n"
             "Hypothesis: {hypothesis}\n\n"
             "Consider:\n"
-            "- Are terms well-defined?\n"
-            "- Is the relationship clearly stated?\n"
-            "- Could different readers interpret it differently?\n\n"
+            "- Are all terms and concepts precisely defined?\n"
+            "- Is the relationship between variables explicitly stated?\n"
+            "- Is there any ambiguity that could lead to multiple interpretations?\n\n"
             "Format your response as:\n"
             "Score: [1-5]\n"
             "Reasoning: [explanation]"
@@ -83,10 +84,12 @@ PROMPTS = {
         ),
         "user": (
             "Evaluate the plausibility of this hypothesis:\n\n"
+            "Existing Knowledge:\n{known_hypotheses}\n\n"
             "Hypothesis: {hypothesis}\n\n"
             "Consider:\n"
             "- Does it make logical sense?\n"
-            "- Are the relationships reasonable?\n"
+            "- Are the relationships reasonable and consistent with known patterns?\n"
+            "- Does it align with or reasonably extend existing knowledge?\n"
             "- Could this be tested?\n\n"
             "Format your response as:\n"
             "Score: [1-5]\n"

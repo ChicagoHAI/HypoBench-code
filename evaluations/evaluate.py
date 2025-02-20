@@ -93,5 +93,7 @@ def main():
         for metric, value in metrics.items():
             logger.info(f"{metric}: {value}")
 
+    if args.model_type == 'gpt':
+        logger.info(f"Total cost with {args.model_name}: {api.total_cost:.2f} USD")
 if __name__ == "__main__":
     main()
