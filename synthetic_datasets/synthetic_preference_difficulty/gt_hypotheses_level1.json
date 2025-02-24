@@ -1,0 +1,7 @@
+[
+    "If the \"political_opinion\" of the given tweet is \"advocates for environmental policies\", then it is likely to be classified as \"Outdoor Enthusiast\" and unlikely to be classified as \"Tech-Savvy Consumer\".",
+    "If the \"political_opinion\" of the given tweet is \"endorses digital privacy rights\", then it is a bit unlikely to be classified as \"Outdoor Enthusiast\" and highly unlikely to be classified as \"Health-Conscious Eater\".",
+    "If the \"political_opinion\" of the given tweet is \"supports healthcare reform\", then it is likely to be classified as \"Tech-Savvy Consumer\" and unlikely to be classified as \"Outdoor Enthusiast\".",
+    "If the \"political_opinion\" of the given tweet is \"champions sustainable practices\", then it is highly likely to be classified as \"Tech-Savvy Consumer\" and a bit likely to be classified as \"Health-Conscious Eater\".",
+    "If the \"political_opinion\" of the given tweet is \"favors data-driven governance\", then it is likely to be classified as \"Health-Conscious Eater\" and unlikely to be classified as \"Tech-Savvy Consumer\"."
+]
