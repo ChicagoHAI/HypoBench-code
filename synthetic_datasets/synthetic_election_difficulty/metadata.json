@@ -1,0 +1,172 @@
+{
+    "task_description": "Given a tweet, determine the likely voting preference of the person for the 2024 U.S. presidential election. The classification should consider whether the individual is likely to vote for the Democratic candidate, the Republican candidate, a third-party candidate, or abstain from voting. The analysis should take into account explicit endorsements, political ideology, sentiment toward candidates and policies, use of partisan language, engagement with political topics, and references to past voting behavior. Additionally, indirect indicators such as reactions to major political events, stance on key social and economic issues, and alignment with party-affiliated hashtags or slogans should be factored into the prediction. The classification should aim to capture both strong political affiliations and nuanced, context-dependent voting tendencies.",
+    "labels": [
+        "Likely Democratic Voter",
+        "Likely Republican Voter",
+        "Likely Third-party/Abstain Voter"
+    ],
+    "task_name": "synthetic_election",
+    "num_templates": 4,
+    "num_gap_per_template": [
+        3,
+        4
+    ],
+    "phrase_types": [
+        "political_endorsement",
+        "policy_stance",
+        "partisan_language",
+        "political_event_reaction"
+    ],
+    "features": {
+        "political_endorsement": [
+            "endorses the Democratic candidate",
+            "champions conservative values",
+            "advocates for third-party alternatives",
+            "criticizes mainstream political parties",
+            "promotes non-voting as a protest"
+        ],
+        "policy_stance": [
+            "advocates for universal healthcare",
+            "opposes tax cuts for corporations",
+            "supports immigration reform",
+            "endorses climate change initiatives",
+            "champions gun rights"
+        ],
+        "partisan_language": [
+            "promotes universal healthcare",
+            "defends Second Amendment rights",
+            "advocates for libertarian policies",
+            "criticizes two-party system",
+            "supports social justice initiatives"
+        ],
+        "political_event_reaction": [
+            "criticizes Supreme Court decision favoring conservatives",
+            "praises Biden's climate change policy",
+            "condemns government shutdown orchestrated by Republicans",
+            "expresses frustration over lack of third-party debate presence",
+            "celebrates passage of bipartisan infrastructure bill"
+        ]
+    },
+    "templates": {
+        "I'm planning to vote for [political_endorsement] because I strongly support their stance on [policy_stance]. This is especially important to me following [political_event_reaction], and I think it's critical that we all use our voices. I know some might disagree, but I can't stand the [partisan_language] being thrown around these days.": {
+            "political_endorsement": [
+                "the Democratic candidate, whom I endorse",
+                "a candidate who champions conservative values",
+                "those who advocate for third-party alternatives",
+                "someone who criticizes mainstream political parties",
+                "the idea of promoting non-voting as a protest"
+            ],
+            "policy_stance": [
+                "advocating for universal healthcare",
+                "opposing tax cuts for corporations",
+                "supporting immigration reform",
+                "endorsing climate change initiatives",
+                "championing gun rights"
+            ],
+            "partisan_language": [
+                "promotion of universal healthcare",
+                "defense of Second Amendment rights",
+                "advocacy for libertarian policies",
+                "criticism of the two-party system",
+                "support for social justice initiatives"
+            ],
+            "political_event_reaction": [
+                "the criticism of the Supreme Court decision that favored conservatives",
+                "the praise for Biden's climate change policy",
+                "the condemnation of the government shutdown orchestrated by Republicans",
+                "the expression of frustration over the lack of third-party debate presence",
+                "the celebration of the passage of the bipartisan infrastructure bill"
+            ]
+        },
+        "After [political_event_reaction], I've been re-evaluating my stance on [policy_stance]. While I usually align with [political_endorsement], I find the [partisan_language] in current discourse off-putting. I'm not sure what my vote will be yet, but these issues are at the forefront of my mind.": {
+            "political_endorsement": [
+                "those who support the Democratic candidate",
+                "individuals who advocate for conservative values",
+                "those who promote third-party alternatives",
+                "people who critique mainstream political parties",
+                "those who endorse non-voting as a form of protest"
+            ],
+            "policy_stance": [
+                "advocating for universal healthcare",
+                "opposing tax cuts for corporations",
+                "supporting immigration reform",
+                "endorsing climate change initiatives",
+                "championing gun rights"
+            ],
+            "partisan_language": [
+                "way in which universal healthcare is promoted",
+                "manner in which Second Amendment rights are defended",
+                "approach to advocating libertarian policies",
+                "criticism of the two-party systems",
+                "support for social justice initiatives"
+            ],
+            "political_event_reaction": [
+                "After criticizing the Supreme Court's decision that favors conservatives, I've been re-evaluating my stance on policy_stance. While I usually align with political_endorsement, I find the partisan_language in current discourse off-putting. I'm not sure what my vote will be yet, but these issues are at the forefront of my mind.",
+                "After praising President Biden's policy on climate change, I've been re-evaluating my stance on policy_stance. While I usually align with political_endorsement, I find the partisan_language in current discourse off-putting. I'm not sure what my vote will be yet, but these issues are at the forefront of my mind.",
+                "After condemning the government shutdown that was orchestrated by Republicans, I've been re-evaluating my stance on policy_stance. While I usually align with political_endorsement, I find the partisan_language in current discourse off-putting. I'm not sure what my vote will be yet, but these issues are at the forefront of my mind.",
+                "After expressing frustration regarding the lack of third-party candidates in the debate, I've been re-evaluating my stance on policy_stance. While I usually align with political_endorsement, I find the partisan_language in current discourse off-putting. I'm not sure what my vote will be yet, but these issues are at the forefront of my mind.",
+                "After celebrating the successful passage of the bipartisan infrastructure bill, I've been re-evaluating my stance on policy_stance. While I usually align with political_endorsement, I find the partisan_language in current discourse off-putting. I'm not sure what my vote will be yet, but these issues are at the forefront of my mind."
+            ]
+        },
+        "Despite the [partisan_language] I've seen, my vote is going to [political_endorsement] this election. Their position on [policy_stance] resonates with me, especially in light of [political_event_reaction]. It's crucial that we look beyond the rhetoric and focus on real issues.": {
+            "political_endorsement": [
+                "endorse the Democratic candidate",
+                "champion conservative values",
+                "advocate for third-party alternatives",
+                "criticize mainstream political parties",
+                "promote non-voting as a form of protest"
+            ],
+            "policy_stance": [
+                "advocating for universal healthcare",
+                "opposing tax cuts for corporations",
+                "supporting immigration reform",
+                "endorsing climate change initiatives",
+                "championing gun rights"
+            ],
+            "partisan_language": [
+                "promotion of universal healthcare that I've observed",
+                "defense of Second Amendment rights that I've noticed",
+                "advocacy for libertarian policies that I've encountered",
+                "criticism of the two-party system that I've witnessed",
+                "support for social justice initiatives that I've observed"
+            ],
+            "political_event_reaction": [
+                "the criticism of the Supreme Court decision favoring conservatives",
+                "the praise for President Biden's climate change policy",
+                "the condemnation of the government shutdown orchestrated by the Republicans",
+                "the expression of frustration regarding the absence of third-party debate participation",
+                "the celebration of the bipartisan infrastructure bill's passage"
+            ]
+        },
+        "I was quite taken aback by [political_event_reaction], which led me to reconsider my position on [policy_stance]. The [partisan_language] makes it difficult to stay neutral, but I'm leaning towards [political_endorsement] as the election approaches.": {
+            "political_endorsement": [
+                "endorsing the Democratic candidate",
+                "championing conservative values",
+                "advocating for third-party alternatives",
+                "criticizing mainstream political parties",
+                "promoting non-voting as a form of protest"
+            ],
+            "policy_stance": [
+                "advocating for universal healthcare",
+                "opposing tax cuts for corporations",
+                "supporting immigration reform",
+                "endorsing climate change initiatives",
+                "championing gun rights"
+            ],
+            "partisan_language": [
+                "promotion of universal healthcare",
+                "defense of Second Amendment rights",
+                "advocacy for libertarian policies",
+                "criticism of the two-party system",
+                "support for social justice initiatives"
+            ],
+            "political_event_reaction": [
+                "the criticism of the Supreme Court decision favoring conservatives",
+                "the praise for Biden's climate change policy",
+                "the condemnation of the government shutdown orchestrated by Republicans",
+                "the expression of frustration over the lack of third-party debate presence",
+                "the celebration of the passage of the bipartisan infrastructure bill"
+            ]
+        }
+    }
+}

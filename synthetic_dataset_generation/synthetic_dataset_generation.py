@@ -305,8 +305,12 @@ class SyntheticDatasetGenerator:
         output_dir = os.path.dirname(self.output_path)
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
-        with open(os.path.join(output_dir, "clf_model.pkl"), "wb") as f:
-            pickle.dump(self.clf_model, f)
+        if not os.path.exists(os.path.join(output_dir, "clf_model.pkl")):
+            with open(os.path.join(output_dir, "clf_model.pkl"), "wb") as f:
+                pickle.dump(self.clf_model, f)
+        else: 
+            with open(os.path.join(output_dir, "clf_model.pkl"), "rb") as f:
+                self.clf_model = pickle.load(f)
         return self.clf_model
 
     def initialize_from_metadata(self, metadata_path: str):

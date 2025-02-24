@@ -1,0 +1,38 @@
+[
+    {
+        "id": "https://openalex.org/W2104549677",
+        "title": "A global reference for human genetic variation",
+        "abstract": "The 1000 Genomes Project set out to provide a comprehensive description of common human genetic variation by applying whole-genome sequencing to a diverse set of individuals from multiple populations. Here we report completion of the project, having reconstructed the genomes of 2,504 individuals from 26 populations using a combination of low-coverage whole-genome sequencing, deep exome sequencing, and dense microarray genotyping. We characterized a broad spectrum of genetic variation, in total over 88 million variants (84.7 million single nucleotide polymorphisms (SNPs), 3.6 million short insertions/deletions (indels), and 60,000 structural variants), all phased onto high-quality haplotypes. This resource includes >99% of SNP variants with a frequency of >1% for a variety of ancestries. We describe the distribution of genetic variation across the global sample, and discuss the implications for common disease studies.",
+        "high_impact": 1
+    },
+    {
+        "id": "https://openalex.org/W2076154138",
+        "title": "Integrative analysis of 111 reference human epigenomes",
+        "abstract": "The reference human genome sequence set the stage for studies of genetic variation and its association with human disease, but epigenomic studies lack a similar reference. To address this need, the NIH Roadmap Epigenomics Consortium generated the largest collection so far of human epigenomes for primary cells and tissues. Here we describe the integrative analysis of 111 reference human epigenomes generated as part of the programme, profiled for histone modification patterns, DNA accessibility, DNA methylation and RNA expression. We establish global maps of regulatory elements, define regulatory modules of coordinated activity, and their likely activators and repressors. We show that disease- and trait-associated genetic variants are enriched in tissue-specific epigenomic marks, revealing biologically relevant cell types for diverse human traits, and providing a resource for interpreting the molecular basis of human disease. Our results demonstrate the central role of epigenomic information for understanding gene regulation, cellular differentiation and human disease.",
+        "high_impact": 1
+    },
+    {
+        "id": "https://openalex.org/W1986241711",
+        "title": "Comprehensive genomic characterization of head and neck squamous cell carcinomas",
+        "abstract": "The Cancer Genome Atlas profiled 279 head and neck squamous cell carcinomas (HNSCCs) to provide a comprehensive landscape of somatic genomic alterations. Here we show that human-papillomavirus-associated tumours are dominated by helical domain mutations of the oncogene PIK3CA, novel alterations involving loss of TRAF3, and amplification of the cell cycle gene E2F1. Smoking-related HNSCCs demonstrate near universal loss-of-function TP53 mutations and CDKN2A inactivation with frequent copy number alterations including amplification of 3q26/28 and 11q13/22. A subgroup of oral cavity tumours with favourable clinical outcomes displayed infrequent copy number alterations in conjunction with activating mutations of HRAS or PIK3CA, coupled with inactivating mutations of CASP8, NOTCH1 and TP53. Other distinct subgroups contained loss-of-function alterations of the chromatin modifier NSD1, WNT pathway genes AJUBA and FAT1, and activation of oxidative stress factor NFE2L2, mainly in laryngeal tumours. Therapeutic candidate alterations were identified in most HNSCCs. The Cancer Genome Atlas presents an integrative genome-wide analysis of genetic alterations in 279 head and neck squamous cell carcinomas (HNSCCs), which are classified by human papillomavirus (HPV) status; alterations in EGFR, FGFR, PIK3CA and cyclin-dependent kinases are shown to represent candidate targets for therapeutic intervention in most HNSCCs. Squamous cell head and neck cancer is one of the most common and deadly cancers. Despite initial responses to combinations of surgery, radiation and chemotherapy, approximately half of all tumours recur, usually within two years of initial diagnosis. Molecular markers and targeted therapies have had little impact on this disease to date. Here, The Cancer Genome Atlas team presents a detailed genome-wide overview of alterations and highlights critical genetic events of potential biological and clinical significance in head and neck squamous cell carcinomas (HNSCCs) with different human papillomavirus status. Mutational profiles reveal distinct subgroups of HNSCCs. Mutations in EGFR, FGFRs, PIK3CA and cyclin-dependent kinases represent candidate targets for therapeutic intervention in the majority of HNSCCs.",
+        "high_impact": 1
+    },
+    {
+        "id": "https://openalex.org/W2414968627",
+        "title": "Q&amp;A: Boson beginnings",
+        "abstract": "Fran\u00e7ois Englert shared the 2013 Nobel Prize in Physics with Peter Higgs for the theoretical discovery of a mechanism that gives mass to subatomic particles. For this work, he collaborated with Robert Brout, who died in 2011. He looks back on his contribution to science with Thifhelimbilu Daphney Bucher.",
+        "high_impact": 0
+    },
+    {
+        "id": "https://openalex.org/W4230393384",
+        "title": "Oldest animal sperm spotted",
+        "abstract": "Cell-biology labs often struggle to reproduce the research results of other groups.But a 15 July report suggests that many of those troubles would vanish if scientists reached out to the original experimenters.The report, released by the American Society for Cell Biology (ASCB), includes survey results from hundreds of ASCB members and calls for changes in scientific culture to make results easier to confirm.Besides better communication, it urges scientists to adopt more-uniform standards within their fields and to focus more on data quality rather than on publishing in high-impact journals.",
+        "high_impact": 0
+    },
+    {
+        "id": "https://openalex.org/W4237864794",
+        "title": "Spotlight on Denmark",
+        "abstract": "DANDRITE's director since its establishment in 2013, says the institute's goals are scientifc excellence, original research, and leadership training.\"We're creating an environment to develop promising young scientists into international research leaders, \" he says.Te fve researchers are all new to Denmark.\"It was a risk coming here and we still feel a little isolated, \" says von Philipsborn.But Denham notes, \"we're quickly building",
+        "high_impact": 0
+    }
+]
