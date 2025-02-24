@@ -1,7 +1,0 @@
-[
-    "If the \"partisan_language\" of the given tweet is \"promotes universal healthcare\", then it is likely to be classified as \"Likely Third-party/Abstain Voter\" and unlikely to be classified as \"Likely Republican Voter\".",
-    "If the \"partisan_language\" of the given tweet is \"defends Second Amendment rights\", then it is likely to be classified as \"Likely Democratic Voter\" and unlikely to be classified as \"Likely Republican Voter\".",
-    "If the \"partisan_language\" of the given tweet is \"advocates for libertarian policies\", then it is likely to be classified as \"Likely Republican Voter\" and unlikely to be classified as \"Likely Third-party/Abstain Voter\".",
-    "If the \"partisan_language\" of the given tweet is \"criticizes two-party system\", then it is likely to be classified as \"Likely Democratic Voter\" and unlikely to be classified as \"Likely Third-party/Abstain Voter\".",
-    "If the \"partisan_language\" of the given tweet is \"supports social justice initiatives\", then it is highly likely to be classified as \"Likely Democratic Voter\" and a bit likely to be classified as \"Likely Third-party/Abstain Voter\"."
-]

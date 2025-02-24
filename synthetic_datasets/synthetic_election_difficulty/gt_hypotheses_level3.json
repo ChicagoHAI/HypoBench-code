@@ -1,7 +1,0 @@
-[
-    "If the \"policy_stance\" of the given tweet is \"advocates for universal healthcare\", then it is likely to be classified as \"Likely Republican Voter\" and unlikely to be classified as \"Likely Third-party/Abstain Voter\".",
-    "If the \"policy_stance\" of the given tweet is \"opposes tax cuts for corporations\", then it is likely to be classified as \"Likely Third-party/Abstain Voter\" and unlikely to be classified as \"Likely Democratic Voter\".",
-    "If the \"policy_stance\" of the given tweet is \"supports immigration reform\", then it is likely to be classified as \"Likely Third-party/Abstain Voter\" and unlikely to be classified as \"Likely Democratic Voter\".",
-    "If the \"policy_stance\" of the given tweet is \"endorses climate change initiatives\", then it is likely to be classified as \"Likely Third-party/Abstain Voter\" and unlikely to be classified as \"Likely Republican Voter\".",
-    "If the \"policy_stance\" of the given tweet is \"champions gun rights\", then it is likely to be classified as \"Likely Republican Voter\" and unlikely to be classified as \"Likely Third-party/Abstain Voter\"."
-]
