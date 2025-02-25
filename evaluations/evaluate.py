@@ -20,7 +20,7 @@ def setup_evaluator(args):
     
     # Configure root logger first
     LoggerConfig.setup_logger(
-        logging.DEBUG,
+        logging.INFO,
         log_filename,
     )
     

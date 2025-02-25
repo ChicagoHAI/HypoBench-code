@@ -20,15 +20,19 @@ TASKS=(
     "gptgc_detect"
     "persuasive_pairs"
     "dreaddit"
+    "headline_binary"
+    "retweet"
 )
 
 HYPOGENIC_COMMON_PATH="hypotheses_training_sample_final_seed_42_epoch_0.json"
+INIT_COMMON_PATH="hypotheses_training_sample_0_seed_42_epoch_0.json"
 # Define methods and their relative paths
 METHOD_PATHS=(
     ["HypoGeniC"]="hyp_${HYP_SIZE}/${HYPOGENIC_COMMON_PATH}"
-    ["Zero_shot_gen"]="hyp_${HYP_SIZE}_zero_shot/${HYPOGENIC_COMMON_PATH}"
-    ["Literature_only"]="hyp_${HYP_SIZE}_only_paper/${HYPOGENIC_COMMON_PATH}"
+    ["Zero_shot_gen"]="hyp_${HYP_SIZE}_zero_shot/${INIT_COMMON_PATH}"
+    ["Literature_only"]="hyp_${HYP_SIZE}_only_paper/${INIT_COMMON_PATH}"
     ["HypoRefine"]="hyp_${HYP_SIZE}_with_paper/${HYPOGENIC_COMMON_PATH}"
+    ["Union"]="union/${HYPOGENIC_COMMON_PATH}"
     ["IO_prompting"]="IO_refinement/hypotheses_training_sample_init_seed_42_epoch_0.json"
     ["IO_refinement"]="IO_refinement/hypotheses_training_sample_final_seed_42_epoch_2.json"
     # Add more method-path pairs as needed
