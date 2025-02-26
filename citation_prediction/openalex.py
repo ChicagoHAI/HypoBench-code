@@ -278,37 +278,81 @@ if __name__ == "__main__":
             "year_end": args_dict["year_end"],
             "percentage": args_dict["percentage"],
             "years_after": args_dict["years_after"],
-            "save_path": args_dict["save_path"],
+            "save_path": f"{args_dict["save_path"]}",  # naming convention allows "+" 
             "download_date": date.today().strftime("%Y-%m-%d"),
             "final_data_count_split": {},
             "filtered_data_count_split": {},
         }
     }
+    if not os.path.exists(os.path.join(args_dict["save_path"], "metadata.json")):
+        total_data_count = 0
+        for journal in args_dict["journal_list"]:
+            journal_id = get_source_id(journal)
+            # Initialize the count for this journal
+            metadata["meta"]["final_data_count_split"][journal] = {}
+            metadata["meta"]["filtered_data_count_split"][journal] = {}
+            for year in range(args_dict["year_start"], args_dict["year_end"] + 1):
+                raw_data_count, final_data_count = download_and_process_data(
+                    journal,
+                    journal_id,
+                    year,
+                    args_dict["percentage"],
+                    args_dict["years_after"],
+                    args_dict["save_path"],
+                )
+                metadata["meta"]["filtered_data_count_split"][journal][year] = raw_data_count - final_data_count
+                metadata["meta"]["final_data_count_split"][journal][year] = final_data_count
+                total_data_count += final_data_count
+        metadata["meta"]["total_data_count"] = total_data_count
+            
 
-    total_data_count = 0
+
+        # After processing all data, save the combined metadata
+        metadata_file_path = os.path.join(args_dict["save_path"], "metadata.json")
+        with open(metadata_file_path, "w") as file:
+            json.dump(metadata, file, indent=4)
+        print(f"Combined metadata saved to {metadata_file_path}.")
+    # process data into huggingface dataset
+    os.makedirs(f"{args_dict['save_path']}/huggingface", exist_ok=True)
+    """
+    huggingface data are a set of keys, each key is a feature name, and each value is a list of feature values. 
+    """
+    data_dict = {}
+    data_dict["year"] = []
     for journal in args_dict["journal_list"]:
-        journal_id = get_source_id(journal)
-        # Initialize the count for this journal
-        metadata["meta"]["final_data_count_split"][journal] = {}
-        metadata["meta"]["filtered_data_count_split"][journal] = {}
         for year in range(args_dict["year_start"], args_dict["year_end"] + 1):
-            raw_data_count, final_data_count = download_and_process_data(
-                journal,
-                journal_id,
-                year,
-                args_dict["percentage"],
-                args_dict["years_after"],
-                args_dict["save_path"],
-            )
-            metadata["meta"]["filtered_data_count_split"][journal][year] = raw_data_count - final_data_count
-            metadata["meta"]["final_data_count_split"][journal][year] = final_data_count
-            total_data_count += final_data_count
-    metadata["meta"]["total_data_count"] = total_data_count
-        
+            file_path = os.path.join(args_dict["save_path"], f"{journal}_{year}.json")
+            with open(file_path, "r") as file:
+                data = json.load(file)
+                for paper in data:
+                    for key, value in paper.items():
+                        if key not in data_dict:
+                            data_dict[key] = []
+                        data_dict[key].append(value)
+                    data_dict["year"].append(year)
+    # change key name: "high_impact" -> "label"
+    data_dict["label"] = data_dict.pop("high_impact")
+    # shuffle the dataset but preserve relative list ordering
+    indices = list(range(len(data_dict["label"])))
+    import random
+    random.shuffle(indices)
+    for key, value in data_dict.items():
+        data_dict[key] = [value[i] for
+                          i in indices]
+    # Save the huggingface dataset
+    train, val, test = 0.8, 0.1, 0.1
+    train_size = int(len(data_dict["label"]) * train)
+    val_size = int(len(data_dict["label"]) * val)
+    test_size = len(data_dict["label"]) - train_size - val_size
+    data_dict_train = {key: value[:train_size] for key, value in data_dict.items()}
+    data_dict_val = {key: value[train_size:train_size + val_size] for key, value in data_dict.items()}
+    data_dict_test = {key: value[train_size + val_size:] for key, value in data_dict.items()}
+    with open(f"{args_dict['save_path']}/huggingface/citation_train.json", "w") as file:
+        json.dump(data_dict_train, file, indent=4)
+    with open(f"{args_dict['save_path']}/huggingface/citation_val.json", "w") as file:
+        json.dump(data_dict_val, file, indent=4)
+    with open(f"{args_dict['save_path']}/huggingface/citation_test.json", "w") as file:
+        json.dump(data_dict_test, file, indent=4)
+    print(f"Saved huggingface dataset to {args_dict['save_path']}/huggingface/citation_train.json, citation_val.json, citation_test.json")
 
 
-    # After processing all data, save the combined metadata
-    metadata_file_path = os.path.join(args_dict["save_path"], "metadata.json")
-    with open(metadata_file_path, "w") as file:
-        json.dump(metadata, file, indent=4)
-    print(f"Combined metadata saved to {metadata_file_path}.")
