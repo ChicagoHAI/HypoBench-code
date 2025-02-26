@@ -4,3 +4,5 @@ openai_key.txt
 openai_organization.txt
 *.pyc
 *.log
+citation_prediction/data/raw_h
+citation_prediction/data/raw_r
