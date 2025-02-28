@@ -10,7 +10,10 @@ MODEL_NAME="gpt-4o"
 MODEL_PATH=""
 
 # Model to evaluate
-MODEL_TO_EVAL="gpt-4o-mini"
+# MODEL_TO_EVAL="gpt-4o-mini"
+# MODEL_TO_EVAL="meta-llama/Meta-Llama-3.1-70B-Instruct"
+# MODEL_TO_EVAL="Qwen/Qwen2.5-72B-Instruct"
+MODEL_TO_EVAL="DeepSeek/DeepSeek-R1-Distill-Llama-70B-local"
 HYP_SIZE=20
 
 # Define tasks

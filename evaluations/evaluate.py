@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Dict, List
 import datetime
 import os
+import json
 
 #different evaluation methods
 from hypothesis_discovery_rate.eval_HDR import evaluate_hdr
@@ -61,6 +62,22 @@ def run_evaluations(args, logger, api):
     
     return results
 
+def save_results_to_json(results, log_file_base):
+    """Save evaluation results to JSON file."""
+    
+    timestamp = datetime.datetime.now().strftime('%Y-%m-%d,%H-%M-%S')
+    json_file_path = f"results/{log_file_base}.json"
+    
+    results["metadata"] = {
+        "timestamp": timestamp,
+        "date": datetime.datetime.now().strftime('%Y-%m-%d'),
+    }
+    
+    with open(json_file_path, 'w') as f:
+        json.dump(results, f, indent=2)
+    
+    return json_file_path
+
 def main():
     parser = argparse.ArgumentParser(description='HypoBench Evaluation Suite')
     
@@ -86,7 +103,6 @@ def main():
     logger, api = setup_evaluator(args)
     results = run_evaluations(args, logger, api)
     
-    # Print summary of all results
     logger.info("\nEvaluation Summary:")
     for eval_type, metrics in results.items():
         logger.info(f"\n{eval_type.upper()} Results:")
@@ -95,5 +111,15 @@ def main():
 
     if args.model_type == 'gpt':
         logger.info(f"Total cost with {args.model_name}: {api.total_cost:.2f} USD")
+        
+        results["cost"] = {
+            "model": args.model_name,
+            "total_cost_usd": api.total_cost
+        }
+    
+    if args.log_file:
+        json_path = save_results_to_json(results, args.log_file)
+        logger.info(f"Results saved to: {json_path}")
+
 if __name__ == "__main__":
     main()
