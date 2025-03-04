@@ -7,6 +7,8 @@ from collections import defaultdict
 from scipy.stats import percentileofscore
 from datetime import datetime, date
 
+DEFAULT_TASK_DESCRIPTION = "The task is to predict whether a paper will be highly cited or not. The dataset contains papers from a list of academic journals or conferences, and the goal is to predict whether a paper will be in the top or bottom percentile of citations after a specified number of years. The dataset includes the title, abstract, and publication year of each paper, along with a label indicating whether the paper is in the top or bottom percentile of citations after a specified number of years. "
+
 parser = argparse.ArgumentParser()
 parser.add_argument(
     "--save_path",
@@ -305,7 +307,15 @@ if __name__ == "__main__":
                 total_data_count += final_data_count
         metadata["meta"]["total_data_count"] = total_data_count
             
-
+        # will add two new keys in metadata as requested. 
+        task_description = DEFAULT_TASK_DESCRIPTION
+        metadata["task_description"] = task_description
+        metadata["feature_description"] = {
+            "id": "Unique identifier for the research paper",
+            "title": "Title of the research paper",
+            "abstract": "Abstract of the research paper",
+            "high_impact": "Whether the research paper is in the top percentile or bottom percentile of citations after a specified number of years, with 1 indicating top percentile and 0 indicating bottom percentile",
+        }  # Feature description will be discussing each feature in the dataset, including: "id", "title", "abstract", "high_impact"
 
         # After processing all data, save the combined metadata
         metadata_file_path = os.path.join(args_dict["save_path"], "metadata.json")
@@ -328,7 +338,7 @@ if __name__ == "__main__":
                     for key, value in paper.items():
                         if key not in data_dict:
                             data_dict[key] = []
-                        data_dict[key].append(value)
+                        data_dict[key].append(str(value))
                     data_dict["year"].append(year)
     # change key name: "high_impact" -> "label"
     data_dict["label"] = data_dict.pop("high_impact")
