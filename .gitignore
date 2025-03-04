@@ -6,3 +6,4 @@ openai_organization.txt
 *.log
 citation_prediction/data/raw_h
 citation_prediction/data/raw_r
+citation_prediction/data/legacy
