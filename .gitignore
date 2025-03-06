@@ -2,8 +2,10 @@
 claude_key.txt
 openai_key.txt
 openai_organization.txt
+playgrounds/*
 *.pyc
 *.log
 citation_prediction/data/raw_h
 citation_prediction/data/raw_r
 citation_prediction/data/legacy
+results/*
