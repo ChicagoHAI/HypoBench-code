@@ -18,8 +18,7 @@ def evaluate_aspect(hypothesis: str,
     logger.debug(f"\nEvaluating {aspect} for hypothesis: {hypothesis}")
     
     kwargs = {"hypothesis": hypothesis}
-    if aspect == "novelty":
-        kwargs["known_hypotheses"] = format_hypotheses_list(known_hypotheses)
+    kwargs["known_hypotheses"] = format_hypotheses_list(known_hypotheses)
         
     messages = get_prompt(aspect, **kwargs)
     response = api.generate(messages)

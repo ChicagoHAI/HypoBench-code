@@ -1,5 +1,7 @@
 claude_key.txt
 openai_key.txt
 openai_organization.txt
+playgrounds/*
 *.pyc
 *.log
+results/*
