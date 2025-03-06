@@ -94,7 +94,6 @@ def main():
     # Evaluation types
     parser.add_argument('--all', action='store_true', help='Run all evaluations')
     parser.add_argument('--hdr', action='store_true', help='Run HDR evaluation')
-    parser.add_argument('--novelty', action='store_true', help='Run novelty evaluation')
     parser.add_argument('--quality', action='store_true', help='Run quality evaluation')
     # TODO: Add other evaluation type flags
     
