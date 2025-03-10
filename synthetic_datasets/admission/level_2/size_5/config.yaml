@@ -35,7 +35,7 @@ prompt_templates:
       - Number of strong extracurricular activities (0-3)
       - English grade: (A-F)
 
-      These hypotheses should identify patterns in the student data that predict admission outcomes.
+      These hypotheses should identify patterns that may involve grades, activities, etc. that you can find in the student data. They should also be generalizable to new instances.
       Please propose ${num_hypotheses} refined hypotheses and generate them in the format of 1. [hypothesis], 2. [hypothesis], ... ${num_hypotheses}. [hypothesis].
       
     user: |-
