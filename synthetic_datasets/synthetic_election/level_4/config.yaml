@@ -64,7 +64,7 @@ prompt_templates:
 
   few_shot_baseline:
     system: |-
-      You are a university admission official and want to determine the voting preference of a person based on their tweet.
+      You are a social scientist and want to determine the voting preference of a person based on their tweet.
       You will see a person's tweet,
       and you need to predict the voting preference of the person.
       Give an answer. The answer should be exactly one of the three phrases (Likely Republican Voter, Likely Third-party/Abstain Voter, Likely Democratic Voter).
