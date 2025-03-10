@@ -103,7 +103,7 @@ prompt_templates:
 
       Given the pattern you learned above, give an answer of the preference of the user.
       Think step by step.
-      First step: Think about which pattern can be applied to the tweet.
+      First step: Think about if the pattern can be applied to the tweet.
       Second step: Based on the pattern, what is the preference of the user?
       You must give your final answer in the format of "Final answer: ANSWER". Do not use markdown around your answer.
       
