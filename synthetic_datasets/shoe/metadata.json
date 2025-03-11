@@ -1,0 +1,31 @@
+{
+    "task_name": "Shoe",
+    "task_type": "classification",
+    "task_description": "Predict what color of shoe a new customer will buy.",
+    
+    "features": {
+        "shirt color": {
+            "type": "categorical",
+            "description": "Color of the shirt the customer is wearing.",
+            "possible_values": ["black", "blue", "red", "orange", "green", "white"]
+        }
+    },
+    
+    "labels": {
+        "label": {
+            "type": "multi-class",
+            "values": ["black", "blue", "red", "orange", "green", "white"],
+            "description": "Color of the shoe the customer will actually buy."
+        }
+    },
+    
+    "dataset_sizes": {
+        "train": 900,
+        "validation": 100,
+        "test": 100
+    },
+    
+    "ground_truth_hypotheses": [
+        "Customers will buy shoes of the same color as their shirt."
+    ]
+}

@@ -13,6 +13,24 @@ prompt_templates:
       ${observations}
   few_shot_prefix: |
     Here are some examples of customers with certain features buying certain products:
+
+  initialize_zero_shot:
+    system: |-
+      You are a shoe salesman and want to recommend shoes to customers. There are white, red, orange, green, blue, and black shoes.
+      Based on your past experiences, please generate hypotheses that are useful for predicting the color of the shoes given the appearance of the person.
+      The description of a person's appearance includes their gender, height, age, hat color, shirt color, bag color, and bag size.
+      
+      These hypotheses should identify patterns that you can find in the data. They should also be generalizable to new instances.
+      Please propose ${num_hypotheses} refined hypotheses and generate them in the format of 1. [hypothesis], 2. [hypothesis], ... ${num_hypotheses}. [hypothesis].
+
+    user: |-
+      Please generate hypotheses that are useful for predicting what color of shoes a customer will buy based on their appearance.
+      Please propose ${num_hypotheses} possible hypotheses.
+
+      Generate them in the format of 1. [hypothesis], 2. [hypothesis], ... ${num_hypotheses}. [hypothesis]. 
+
+      Proposed hypotheses:
+    
   batched_generation:
     system: |-
       You're a helpful assistant. Your task is given as follows:
@@ -49,6 +67,17 @@ prompt_templates:
       New customer: ${appearance} is buying a pair of shoes, the shoes should be which color?
       Answer:
 
+  IO_refine_with_feedback:
+    system: |-
+      
+    user: |-
+      Applying your rule to the following inputs does not produce the expected outputs.
+      Here's your proposed hypothesis: ${hypothesis_text}
+      Below is some examples that you predicted wrong using the hypothesis.
+      ${observations}
+      Please generate new hypotheses that maps the given inputs to their corresponding outputs.
+      Propose ${num_hypotheses} possible hypotheses. Generate them in the format of 1. [hypothesis], 2. [hypothesis], ... ${num_hypotheses}. [hypothesis].
+      
   inference:
     system: |-
       Instruction:
@@ -62,7 +91,32 @@ prompt_templates:
     user: |-
       Our learned pattern: ${hypothesis}
       New customer: ${appearance} is buying a pair of shoes, the shoes should be which color?
-      Explain your reasoning before giving your final answer.
+      
+      Given the patterns you learned above, give an answer for the shoe color recommendation. 
+      Think step by step.
+      First step: Consider if the pattern can be applied to this customer.
+      Second step: Based on the pattern, what color of shoe should this customer buy?
+      You must give your final answer in the format of "Final answer: ANSWER". Do not use markdown around your answer.
+
+  multiple_hypotheses_inference:
+    system: |-
+      Instruction:
+      You are a shoe salesman and want to recommend shoes to customers. There are white, red, orange, green, blue, and black shoes.
+      From past experiences, you learned some patterns. 
+      Now, at each time, you should apply the learned pattern, given below, to a new customer and recommend a shoe color.
+      Please give an answer for the shoe color recommendation. 
+      Please give your answer with only one color word, which has to be one of white, red, orange, green, blue, and black.
+      Please give your final answer in the format of {Final answer: answer}
+
+    user: |-
+      Our learned patterns: ${hypotheses}                          
+      New customer: ${appearance} is buying a pair of shoes, the shoes should be which color?
+
+      Given the patterns you learned above, give an answer for the shoe color recommendation. 
+      Think step by step.
+      First step: Think about which pattern can be applied to this customer.
+      Second step: Based on the pattern, what color of shoe should this customer buy?
+      You must give your final answer in the format of "Final answer: ANSWER". Do not use markdown around your answer.
 
   is_relevant:
     system: |-
