@@ -24,20 +24,22 @@ def evaluate_pairwise_discovery(true_hyp: str,
     
     # Check if hypotheses discuss same variable
     match_messages = get_variable_matching_prompt(true_hyp, gen_hyp)
-    logger.debug(f"\nComparing hypotheses:")
-    logger.debug(f"True hypothesis: {true_hyp}")
-    logger.debug(f"Generated hypothesis: {gen_hyp}")
+    logger.info(f"\nComparing hypotheses:")
+    logger.info(f"True hypothesis: {true_hyp}")
+    logger.info(f"Generated hypothesis: {gen_hyp}")
     
     is_match_response = api.generate(match_messages)
     is_match = is_match_response.lower() == 'yes'
     logger.debug(f"Variable match response: {is_match_response}")
+    logger.info(f"Match status: {is_match}")
     
     if is_match:
         # Get relationship correctness score
         rel_messages = get_relationship_correctness_prompt(true_hyp, gen_hyp)
         score_response = api.generate(rel_messages)
         score = float(score_response)
-        logger.debug(f"Relationship score: {score}")
+        logger.debug(f"Relationship score response: {score_response}")
+        logger.info(f"Relationship score: {score}")
         return True, score
     
     return False, 0.0
