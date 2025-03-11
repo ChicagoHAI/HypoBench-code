@@ -65,7 +65,7 @@ def compute_hdr(true_hypotheses: Dict[str, SummaryInformation],
         if discovered:
             discovered_count += 1
             if hyp_scores:
-                all_rel_scores.append(mean(hyp_scores))
+                all_rel_scores.append(max(hyp_scores))
     
     # Calculate metrics
     fdr = discovered_count / total_true_hyps if total_true_hyps else 0

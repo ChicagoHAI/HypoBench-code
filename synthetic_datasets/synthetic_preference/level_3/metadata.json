@@ -1,0 +1,99 @@
+{
+    "task_name": "synthetic_preference",
+    "task_type": "classification",
+    "task_description": "Given a tweet, determine the personal preferences of the user based on the content, sentiment, and language patterns. Preferences may include categories such as favorite activities, political orientation, preferred entertainment genres, dietary choices, technology usage, shopping habits, and social behaviors. The prediction should consider explicit statements (e.g., \"I love hiking\"), implicit cues (e.g., frequent mentions of outdoor gear brands), sentiment analysis (e.g., positive sentiment towards a particular movie or product), and linguistic style (e.g., formal vs. informal tone indicating professional vs. casual interests). The model should account for contextual clues, emojis, hashtags, and engagement patterns (e.g., retweets, likes) to refine preference classification.",
+    
+    "difficulty_level": 1,
+    "difficulty_description": "1 GT feature with 4 distracting features, and 10% label noise.",
+    
+    "features": {
+        "template": {
+            "type": "text",
+            "description": "Tweet content",
+            "possible_values": [
+                "\"I just spent the weekend indulging in my favorite activity, [favorite_activity], and it was amazing! Also, I've been thinking a lot about [political_opinion] recently. Have you watched any good [entertainment_preference] lately? By the way, I've been trying out [dietary_choice] meals, and they are surprisingly delicious!\"",
+                "\"During my free time, I love engaging in [favorite_activity]. Lately, I've found myself agreeing more with [political_opinion] views. For relaxation, nothing beats a good [entertainment_preference] session. Plus, switching to a [dietary_choice] diet has been such a game changer for me!\"",
+                "\"If I'm not doing [favorite_activity], you can find me exploring [political_opinion] discussions online. My evenings are usually spent watching [entertainment_preference], and I've recently embraced [dietary_choice] to stay healthy.\"",
+                "\"Loving the thrill of [favorite_activity]! These days, my thoughts align more with [political_opinion]. Can't get enough of [entertainment_preference] for entertainment. I've also started adopting a [dietary_choice] lifestyle, and it's been great!\""
+            ]
+        },
+        "favorite_activity": {
+            "type": "categorical",
+            "description": "User's favorite activity",
+            "possible_values":
+            [
+                "hiking in national parks",
+                "testing the latest gadgets",
+                "preparing plant-based meals",
+                "exploring new bike trails",
+                "coding in spare time"
+            ]
+        },
+        "political_opinion": {
+            "type": "categorical",
+            "description": "User's political opinion",
+            "possible_values": [
+                "advocates for environmental policies",
+                "endorses digital privacy rights",
+                "supports healthcare reform",
+                "champions sustainable practices",
+                "favors data-driven governance"
+            ]
+        },
+        "entertainment_preference": {
+            "type": "categorical",
+            "description": "User's entertainment preference",
+            "possible_values": [
+                "enjoys adventure documentaries",
+                "follows tech influencers",
+                "watches health-related TV shows",
+                "subscribes to outdoor photography channels",
+                "engages with fitness apps entertainment"
+            ]
+        },
+        "dietary_choice": {
+            "type": "categorical",
+            "description": "User's dietary choice",
+            "possible_values": [
+                "prefers high-protein snacks",
+                "favors organic produce",
+                "chooses plant-based meals",
+                "enjoys meal delivery kits",
+                "opts for gluten-free options"
+            ]
+        }
+    },
+    "labels": {
+        "preference_base": {
+            "type": "multi-class",
+            "values": ["Outdoor Enthusiast",
+                        "Tech-Savvy Consumer",
+                        "Health-Conscious Eater"],
+            "description": "User's preferences"
+        }
+    },
+    
+    "dataset_sizes": {
+        "train": 1750,
+        "validation": 250,
+        "test": 500
+    },
+    
+    "ground_truth_hypotheses": [
+        "If the \"political_opinion\" of the given tweet is \"advocates for environmental policies\", then it is likely to be classified as \"Outdoor Enthusiast\" and unlikely to be classified as \"Tech-Savvy Consumer\".",
+        "If the \"political_opinion\" of the given tweet is \"endorses digital privacy rights\", then it is a bit unlikely to be classified as \"Outdoor Enthusiast\" and highly unlikely to be classified as \"Health-Conscious Eater\".",
+        "If the \"political_opinion\" of the given tweet is \"supports healthcare reform\", then it is likely to be classified as \"Tech-Savvy Consumer\" and unlikely to be classified as \"Outdoor Enthusiast\".",
+        "If the \"political_opinion\" of the given tweet is \"champions sustainable practices\", then it is highly likely to be classified as \"Tech-Savvy Consumer\" and a bit likely to be classified as \"Health-Conscious Eater\".",
+        "If the \"political_opinion\" of the given tweet is \"favors data-driven governance\", then it is likely to be classified as \"Health-Conscious Eater\" and unlikely to be classified as \"Tech-Savvy Consumer\"."
+    ],
+    
+    "task_properties": {
+        "underlying_model": "logistic regression",
+        "balanced": false,
+        "noise_level": 0.1,
+        "true_num_hypotheses": 5,
+        "distractor": 4,
+        "random_dropout": 0.0,
+        "abstraction": null
+    }
+}
