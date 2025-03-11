@@ -18,11 +18,14 @@ HYP_SIZE=20
 
 # Define tasks
 TASKS=(
-    "admission/level_1/base"
-    "admission/level_2/depth_2"
-    "admission/level_2/distractor_3"
-    "admission/level_2/noise_10"
-    "admission/level_2/size_5"
+    # "admission/level_1/base"
+    # "admission/level_2/depth_2"
+    # "admission/level_2/distractor_3"
+    # "admission/level_2/noise_10"
+    # "admission/level_2/size_5"
+    "shoe"
+    "shoe_two_level/simple"
+    "shoe_two_level/hard"
 )
 
 HYPOGEN_PATH_PREFIX="/home/haokunliu/hypothesis-generation"
