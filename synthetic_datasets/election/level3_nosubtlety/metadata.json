@@ -3,8 +3,8 @@
     "task_type": "classification",
     "task_description": "Given a tweet, determine the likely voting preference of the person for the 2024 U.S. presidential election. The classification should consider whether the individual is likely to vote for the Democratic candidate, the Republican candidate, a third-party candidate, or abstain from voting. The analysis should take into account explicit endorsements, political ideology, sentiment toward candidates and policies, use of partisan language, engagement with political topics, and references to past voting behavior. Additionally, indirect indicators such as reactions to major political events, stance on key social and economic issues, and alignment with party-affiliated hashtags or slogans should be factored into the prediction. The classification should aim to capture both strong political affiliations and nuanced, context-dependent voting tendencies.",
     
-    "difficulty_level": 0,
-    "difficulty_description": "one GT feature and 4 distracting features",
+    "difficulty_level": 3,
+    "difficulty_description": "one GT feature and 4 distracting features, with 10% label random flipping",
     
     "features": {
         "political_endorsement": {
@@ -59,7 +59,7 @@
     "labels": {
         "election": {
             "type": "multi-class",
-            "values": ["likely democratic voter", "likely republican voter"],
+            "values": ["likely democratic voter", "likely third-party/abstain voter", "likely republican voter"],
             "description": "Final election voting decision"
         }
     },
@@ -70,16 +70,14 @@
         "test": 300
     },
     
-    "ground_truth_hypotheses": [
-        "If the \"political_event_reaction\" of the given tweet is \"expresses frustration over lack of third-party debate presence\", then it is likely to be classified as \"likely third-party/abstain voter\". Otherwise, it is likely to be classified as \"likely democratic voter\"."
-    ],
+    "ground_truth_hypotheses": ["If the \"political_event_reaction\" of the given tweet is \"criticizes Supreme Court decision favoring conservatives\", then it is likely to be classified as \"likely third-party/abstain voter\" and unlikely to be classified as \"likely republican voter\".", "If the \"political_event_reaction\" of the given tweet is \"praises Biden's climate change policy\", then it is likely to be classified as \"likely democratic voter\" and unlikely to be classified as \"likely republican voter\".", "If the \"political_event_reaction\" of the given tweet is \"condemns government shutdown orchestrated by Republicans\", then it is likely to be classified as \"likely third-party/abstain voter\" and unlikely to be classified as \"likely democratic voter\".", "If the \"political_event_reaction\" of the given tweet is \"expresses frustration over lack of third-party debate presence\", then it is likely to be classified as \"likely republican voter\" and unlikely to be classified as \"likely third-party/abstain voter\".", "If the \"political_event_reaction\" of the given tweet is \"celebrates passage of bipartisan infrastructure bill\", then it is highly likely to be classified as \"likely democratic voter\" and a bit likely to be classified as \"likely third-party/abstain voter\"."],
     
     "task_properties": {
-        "underlying_model": "Binary label classification",
+        "underlying_model": "logistic regression",
         "balanced": false,
-        "noise_level": 0,
+        "noise_level": 0.1,
         "true_num_hypotheses": 1,
-        "distractor": 4,
+        "distractor": 3,
         "abstraction": null
     }
 }
