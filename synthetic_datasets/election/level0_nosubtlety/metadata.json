@@ -75,13 +75,13 @@
     },
     
     "dataset_sizes": {
-        "train": 1750,
-        "validation": 250,
-        "test": 500
+        "train": 200,
+        "validation": 125,
+        "test": 300
     },
     
     "ground_truth_hypotheses": [
-        "If the \"political_event_reaction\" of the given tweet is \"expresses frustration over lack of third-party debate presence\", then it is likely to be classified as \"likely republican voter\". Otherwise, it is likely to be classified as \"likely democratic voter\"."
+        "If the \"political_event_reaction\" of the given tweet is \"expresses frustration over lack of third-party debate presence\", then it is likely to be classified as \"likely third-party/abstain voter\". Otherwise, it is likely to be classified as \"likely democratic voter\"."
     ],
     
     "task_properties": {
