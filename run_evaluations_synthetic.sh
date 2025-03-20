@@ -10,22 +10,34 @@ MODEL_NAME="gpt-4o"
 MODEL_PATH=""
 
 # Model to evaluate
-MODEL_TO_EVAL="gpt-4o-mini"
+# MODEL_TO_EVAL="gpt-4o-mini"
 # MODEL_TO_EVAL="meta-llama/Meta-Llama-3.1-70B-Instruct"
 # MODEL_TO_EVAL="Qwen/Qwen2.5-72B-Instruct"
-# MODEL_TO_EVAL="DeepSeek/DeepSeek-R1-Distill-Llama-70B-local"
+MODEL_TO_EVAL="DeepSeek/DeepSeek-R1-Distill-Llama-70B-local"
 HYP_SIZE=20
 
 # Define tasks
 TASKS=(
-    # "admission/level_1/base"
-    # "admission/level_2/depth_2"
-    # "admission/level_2/distractor_3"
-    # "admission/level_2/noise_10"
-    # "admission/level_2/size_5"
+    "admission/level_1/base"
+    "admission/level_2/depth_2"
+    "admission/level_2/distractor_3"
+    "admission/level_2/noise_10"
+    "admission/level_2/size_5"
     "shoe"
     "shoe_two_level/simple"
     "shoe_two_level/hard"
+    "election/level0"
+    "preference/level0"
+    "election/level1"
+    "preference/level1"
+    "election/level2"
+    "preference/level2"
+    "election/level3"
+    "preference/level3"
+    "election/level4"
+    "preference/level4"
+    "election/level5"
+    "preference/level5"
 )
 
 HYPOGEN_PATH_PREFIX="/home/haokunliu/hypothesis-generation"
