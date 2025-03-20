@@ -460,4 +460,8 @@ class SyntheticDatasetGenerator:
                     hf_data[key].append(entry[key])
             with open(f"{os.path.dirname(data_path)}/{task_name}_{set_name}.json", "w") as f:
                 json.dump(hf_data, f)
+
+
+
+
     

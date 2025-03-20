@@ -1,0 +1,85 @@
+{
+    "task_name": "synthetic_election",
+    "task_type": "classification",
+    "task_description": "Given a tweet, determine the likely voting preference of the person for the 2024 U.S. presidential election. The classification should consider whether the individual is likely to vote for the Democratic candidate, the Republican candidate, a third-party candidate, or abstain from voting. The analysis should take into account explicit endorsements, political ideology, sentiment toward candidates and policies, use of partisan language, engagement with political topics, and references to past voting behavior. Additionally, indirect indicators such as reactions to major political events, stance on key social and economic issues, and alignment with party-affiliated hashtags or slogans should be factored into the prediction. The classification should aim to capture both strong political affiliations and nuanced, context-dependent voting tendencies.",
+    
+    "difficulty_level": 0,
+    "difficulty_description": "one GT feature and 4 distracting features",
+    
+    "features": {
+        "political_endorsement": {
+            "type":"categorical",
+            "description": "Political endorsement of the tweet",
+            "possible_values": [
+                "endorses the Democratic candidate",
+                "champions conservative values",
+                "advocates for third-party alternatives",
+                "criticizes mainstream political parties",
+                "promotes non-voting as a protest"
+            ]
+        },
+        "policy_stance": {
+            "type":"categorical",
+            "description": "Stance on key social and economic issues",
+            "possible_values": [
+            "advocates for universal healthcare",
+            "opposes tax cuts for corporations",
+            "supports immigration reform",
+            "endorses climate change initiatives",
+            "champions gun rights"
+            ]
+        },
+        "partisan_language": {
+            "type":"categorical",
+            "description": "Use of partisan language in the tweet",
+            "possible_values": 
+            [
+            "promotes universal healthcare",
+            "defends Second Amendment rights",
+            "advocates for libertarian policies",
+            "criticizes two-party system",
+            "supports social justice initiatives"
+            ]
+        },
+        "political_event_reaction": 
+        {
+            "type":"categorical",
+            "description": "Reaction to major political events",
+            "possible_values":
+                [
+                "criticizes Supreme Court decision favoring conservatives",
+                "praises Biden's climate change policy",
+                "condemns government shutdown orchestrated by Republicans",
+                "expresses frustration over lack of third-party debate presence",
+                "celebrates passage of bipartisan infrastructure bill"
+            ]
+        }
+    },
+    
+    "labels": {
+        "election": {
+            "type": "multi-class",
+            "values": ["likely democratic voter", "likely republican voter"],
+            "description": "Final election voting decision"
+        }
+    },
+    
+    "dataset_sizes": {
+        "train": 200,
+        "validation": 125,
+        "test": 300
+    },
+    
+    "ground_truth_hypotheses": [
+        "If the \"political_event_reaction\" of the given tweet is \"expresses frustration over lack of third-party debate presence\", then it is likely to be classified as \"likely third-party/abstain voter\". Otherwise, it is likely to be classified as \"likely democratic voter\"."
+    ],
+    
+    "task_properties": {
+        "underlying_model": "Binary label classification",
+        "balanced": false,
+        "noise_level": 0,
+        "true_num_hypotheses": 1,
+        "distractor": 4,
+        "abstraction": null
+    }
+}
