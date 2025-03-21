@@ -31,8 +31,8 @@ prompt_templates:
     system: |-
       You are a helpful assistant for summarizing key findings in research papers on a given topic.
     user: |-
-      Summarize the following research paper, focusing ONLY on this question: What is useful for one to decide whether a academic research paper is impactful or not?
-      Focus on hypotheses of what kind of research papers tend to be highly impactful, do not include technical details in the paper. 
+      Summarize the following research paper, focusing ONLY on this question: What is useful for one to decide whether a academic research paper is impactful or not based on the content of the provided abstract?
+      Focus on the contents of the provided abstracts and come up with hypotheses of what kind of abstract contents make papers more impactful, do not include technical details in the paper. 
       Title: ${title}
       Text: 
       ${paper_text}
@@ -40,7 +40,7 @@ prompt_templates:
   initialize_hypotheses_only_paper:
     system: |-
       You're an experienced paper citation analyst.
-      Given some key findings from a series of research papers, we want to generate hypotheses that are useful for predicting whether a paper is impactful or not. In other words, we want to know whether the paper is likely to be highly impactful.
+      Given some key findings from a series of research papers, we want to generate hypotheses that are useful for predicting whether a paper is impactful or not. In other words, we want to know whether the paper is likely to be highly impactful based on the content of the provided abstract.
       
       Using the given relevant literatures, please propose ${num_hypotheses} possible hypothesis pairs.
       These hypotheses should identify specific patterns that occur across the provided papers.
@@ -50,11 +50,11 @@ prompt_templates:
       b. The opposite hypothesis about what makes papers more likely to be less impactful
 
       Generate them in the format of 1. [hypothesis], 2. [hypothesis], ... ${num_hypotheses}. [hypothesis].
-      The hypotheses should analyze what kind of papers are likely to be highly impactful.
+      The hypotheses should analyze what kind of papers are likely to be highly impactful based on the contents of the provided abstracts.
     user: |-
       We have some key findings from a series of research papers that might be useful for generating the required ${num_hypotheses} hypotheses:
       ${relevant_papers}
-      Please generate hypotheses that are useful for predicting whether a paper is impactful or not.
+      Please generate hypotheses that are useful for predicting whether a paper is impactful or not based on the content of the provided abstract.
       When generating hypotheses, remember not to overuse your own knowledge. Always refer to the key findings from research papers provided. Directly cite passages in the key findings when generating a hypothesis.
       Propose ${num_hypotheses} possible hypotheses. Remember to generate ${num_hypotheses} hypotheses! Generate them in the format of 1. [hypothesis], 2. [hypothesis], ... ${num_hypotheses}. [hypothesis].
       Proposed hypotheses:
@@ -62,23 +62,23 @@ prompt_templates:
   initialize_zero_shot:
     system: |-
       You're an experienced paper citation analyst.
-      Given a set of paper descriptions, we want to generate hypotheses that are useful for predicting whether a paper is impactful or not. In other words, we want to know whether the paper is likely to be highly impactful.
+      Given a set of paper descriptions, we want to generate hypotheses that are useful for predicting whether a paper is impactful or not. In other words, we want to know whether the paper is likely to be highly impactful based on the contents of the provided abstract.
       
       Each hypothesis should contain a pair of the following:
       a. A hypothesis about what makes papers more likely to be highly impactful
       b. The opposite hypothesis about what makes papers more likely to be less impactful
       
       Generate them in the format of 1. [hypothesis], 2. [hypothesis], ... ${num_hypotheses}. [hypothesis].
-      The hypotheses should analyze what kind of papers are likely to be highly impactful.
+      The hypotheses should analyze what kind of papers are likely to be highly impactful based on the contents of the provided abstracts.
     user: |-
-      Please generate hypotheses that are useful for predicting whether a paper is impactful or not.
+      Please generate hypotheses that are useful for predicting whether a paper is impactful or not based on the content of the provided abstract.
       Propose ${num_hypotheses} possible hypotheses. Remember to generate ${num_hypotheses} hypotheses! Generate them in the format of 1. [hypothesis], 2. [hypothesis], ... ${num_hypotheses}. [hypothesis].
       Proposed hypotheses:
 
   refine_with_data:
     system: |-
       You're an experienced paper citation analyst working on a project to identify impactful research papers.
-      Given a set of paper descriptions, we want to generate hypotheses that are useful for predicting whether a paper is impactful or not. In other words, we want to know whether the paper is likely to be highly impactful.
+      Given a set of paper descriptions, we want to generate hypotheses that are useful for predicting whether a paper is impactful or not. In other words, we want to know whether the paper is likely to be highly impactful based on the content of the provided abstract.
       
       Using the given examples, refine the hypothesis pairs provided.
       The desired hypotheses should identify specific patterns that occur across the provided papers.
@@ -88,13 +88,13 @@ prompt_templates:
       b. The opposite hypothesis about what makes papers more likely to be less impactful
 
       Generate refined hypotheses in the format of 1. [hypothesis], 2. [hypothesis], ... ${num_hypotheses}. [hypothesis].
-      The hypotheses should analyze what kind of papers are likely to be highly impactful.
+      The hypotheses should analyze what kind of papers are likely to be highly impactful based on the contents of the provided abstracts.
     user: |-
       We have seen some paper descriptions:
       ${observations}
       We have some hypotheses need to be refined:
       ${hypotheses}
-      Please refine these hypotheses to make them more specific and useful for predicting whether a paper is impactful or not. 
+      Please refine these hypotheses to make them more specific and useful for predicting whether a paper is impactful or not based on the content of the provided abstract.
       When refining the hypotheses, feel free to change the key information or topic of a hypothesis based on the provided prevailing patterns in data if you think it is necessary.
       Generate refined hypotheses in the format of 1. [hypothesis], 2. [hypothesis], ... ${num_hypotheses}. [hypothesis].
       Refined hypotheses:
@@ -102,7 +102,7 @@ prompt_templates:
   refine_with_literature:
     system: |-
       You're an experienced paper citation analyst working on a project to identify impactful research papers.
-      Given a set of paper descriptions, we want to generate hypotheses that are useful for predicting whether a paper is impactful or not. In other words, we want to know whether the paper is likely to be highly impactful.
+      Given a set of paper descriptions, we want to generate hypotheses that are useful for predicting whether a paper is impactful or not. In other words, we want to know whether the paper is likely to be highly impactful based on the content of the provided abstract.
       
       Using the given relevant literatures, refine the hypothesis pairs provided.
       The desired hypotheses should identify specific patterns that occur across the provided papers.
@@ -112,25 +112,25 @@ prompt_templates:
       b. The opposite hypothesis about what makes papers more likely to be less impactful
 
       Generate refined hypotheses in the format of 1. [hypothesis], 2. [hypothesis], ... ${num_hypotheses}. [hypothesis].
-      The hypotheses should analyze what kind of papers are likely to be highly impactful.
+      The hypotheses should analyze what kind of papers are likely to be highly impactful based on the content of the provided abstract.
     user: |-
       We have some key findings from a series of research papers that might be useful for generating hypotheses:
       ${relevant_papers}
       We have some hypotheses need to be refined:
       ${hypotheses}
-      Please refine these hypotheses to make them more specific and useful for predicting whether a paper is impactful or not. 
+      Please refine these hypotheses to make them more specific and useful for predicting whether a paper is impactful or not based on the content of the provided abstract.
       When refining the hypotheses, feel free to change the key information or topic of a hypothesis based on the provided key findings if you think it is necessary.
       Generate refined hypotheses in the format of 1. [hypothesis], 2. [hypothesis], ... ${num_hypotheses}. [hypothesis].
       Refined hypotheses:
 
   boost_specificity:
     system: |-
-      You're an experienced paper citation analyst working on a project to identify impactful research papers.
-      Given a set of paper descriptions, we want to generate hypotheses that are useful for predicting whether a paper is impactful or not. In other words, we want to know whether the paper is likely to be highly impactful.
-      From past experiences, you learned a hypothesis for deciding whether a paper is impactful or not.
+      You're an experienced paper citation analyst working on a project to identify impactful research papers based on the contents of provided abstracts.
+      Given a set of paper descriptions, we want to generate hypotheses that are useful for predicting whether a paper is impactful or not. In other words, we want to know whether the paper is likely to be highly impactful based on the content of the provided abstract.
+      From past experiences, you learned a hypothesis for deciding whether a paper is impactful or not based on the content of the provided abstract.
       Now you need to refine the hypothesis by rephrasing the pattern or adding real-life examples to it so it can be more specific and easier to be used.
       Generate the refined hypothesis in the format of 1. [hypothesis].
-      The hypotheses should analyze what kind of papers are likely to be highly impactful.
+      The hypotheses should analyze what kind of papers are likely to be highly impactful based on the content of the provided abstract.
     user: |-
       This is the hypothesis to be refined:
       ${hypotheses}
@@ -140,12 +140,12 @@ prompt_templates:
 
   balance_specificity:
     system: |-
-      You're an experienced paper citation analyst working on a project to identify impactful research papers.
-      Given a set of paper descriptions, we want to generate hypotheses that are useful for predicting whether a paper is impactful or not. In other words, we want to know whether the paper is likely to be highly impactful.
+      You're an experienced paper citation analyst working on a project to identify impactful research papers based on the contents of provided abstracts.
+      Given a set of paper descriptions, we want to generate hypotheses that are useful for predicting whether a paper is impactful or not. In other words, we want to know whether the paper is likely to be highly impactful based on the content of the provided abstract.
       From past experiences, you learned a hypothesis for deciding whether a paper is impactful or not.
       Now you need to refine the hypothesis by rephrasing the pattern or deleting real-life examples from it so it can be more balanced and easier to be used.
       Generate the refined hypothesis in the format of 1. [hypothesis].
-      The hypotheses should analyze what kind of papers are likely to be highly impactful.
+      The hypotheses should analyze what kind of papers are likely to be highly impactful based on the contents of the provided abstracts.
     user: |-
       This is the hypothesis to be refined:
       ${hypotheses}
@@ -156,7 +156,7 @@ prompt_templates:
   batched_generation:
     system: |-
       You're an experienced paper citation analyst.
-      Given a set of paper descriptions, we want to generate hypotheses that are useful for predicting whether a paper is impactful or not. In other words, we want to know whether the paper is likely to be highly impactful.
+      Given a set of paper descriptions, we want to generate hypotheses that are useful for predicting whether a paper is impactful or not. In other words, we want to know whether the paper is likely to be highly impactful based on the content of the provided abstract.
 
       Using the given examples, please propose ${num_hypotheses} possible hypothesis pairs.
       These hypotheses should identify specific patterns that occur across the provided papers.
@@ -166,12 +166,12 @@ prompt_templates:
       b. The opposite hypothesis about what makes papers more likely to be less impactful
 
       Generate them in the format of 1. [hypothesis], 2. [hypothesis], ... ${num_hypotheses}. [hypothesis].
-      The hypotheses should analyze what kind of papers are likely to be highly impactful.
+      The hypotheses should analyze what kind of papers are likely to be highly impactful based on the contents of the provided abstracts.
 
     user: |-
       We have seen some paper descriptions:
       ${observations}
-      Please generate hypotheses that are useful for predicting whether a paper is impactful or not.
+      Please generate hypotheses that are useful for predicting whether a paper is impactful or not based on the content of the provided abstract.
       Propose ${num_hypotheses} possible hypotheses. Generate them in the format of 1. [hypothesis], 2. [hypothesis], ... ${num_hypotheses}. [hypotheses].
       Proposed hypotheses:
 
@@ -189,7 +189,7 @@ prompt_templates:
   batched_generation_with_paper:
     system: |-
       You're an experienced paper citation analyst.
-      Given a set of paper descriptions, we want to generate hypotheses that are useful for predicting whether a paper is impactful or not. In other words, we want to know whether the paper is likely to be highly impactful.
+      Given a set of paper descriptions, we want to generate hypotheses that are useful for predicting whether a paper is impactful or not. In other words, we want to know whether the paper is likely to be highly impactful based on the content of the provided abstract.
 
       Using the given examples and relevant literatures, please propose ${num_hypotheses} possible hypothesis pairs.
       These hypotheses should identify specific patterns that occur across the provided papers.
@@ -199,14 +199,14 @@ prompt_templates:
       b. The opposite hypothesis about what makes papers more likely to be less impactful
 
       Generate them in the format of 1. [hypothesis], 2. [hypothesis], ... ${num_hypotheses}. [hypothesis].
-      The hypotheses should analyze what kind of papers are likely to be highly impactful.
+      The hypotheses should analyze what kind of papers are likely to be highly impactful based on the contents of the provided abstracts.
 
     user: |-
       We have some key findings from a series of research papers that might be useful for generating hypotheses:
       ${relevant_papers}
       We have seen some paper descriptions:
       ${observations}
-      Please generate hypotheses that are useful for predicting whether a paper is impactful or not.
+      Please generate hypotheses that are useful for predicting whether a paper is impactful or not based on the content of the provided abstract.
       When generating hypotheses, make sure to utilize information both from the key findings of papers and the prevailing patterns in data that you observe.
       Propose ${num_hypotheses} possible hypotheses. Generate them in the format of 1. [hypothesis], 2. [hypothesis], ... ${num_hypotheses}. [hypothesis].
       Proposed hypotheses:
@@ -215,7 +215,7 @@ prompt_templates:
     system: |-
       
     user: |-
-      Welcome, social_scientist and psychologist. Please discuss and debate on what is useful for predicting whether a paper is impactful or not, with the end goal being to generate ${num_hypotheses} hypotheses that are useful for predicting whether a paper is impactful or not.
+      Welcome, social_scientist and psychologist. Please discuss and debate on what is useful for predicting whether a paper is impactful or not, with the end goal being to generate ${num_hypotheses} hypotheses that are useful for predicting whether a paper is impactful or not based on the content of the provided abstract.
       We have some key findings from some research papers that might be useful for generating hypotheses:
       ${relevant_papers}
       Also we have seen some data of paper descriptions:
@@ -231,9 +231,9 @@ prompt_templates:
 
   few_shot_baseline:
     system: |-
-      You are an experienced paper citation analyst agent and want to determine whether a paper is impactful or not.
+      You are an experienced paper citation analyst agent and want to determine whether a paper is impactful or not based on the content of the provided abstract.
       In other words, we want to know whether the paper is likely to be highly impactful.
-      You need to determine whether this pattern holds for the current paper description, and also predict whether the current paper is impactful or not.
+      You need to determine whether this pattern holds for the current paper description, and also predict whether the current paper is impactful based on the content of the provided abstract.
       Give an answer. The answer should be in one word, either impactful or unimpactful without any punctuation.
       Give your final answer in the format of Final answer: answer without any punctuation.
 
@@ -248,8 +248,8 @@ prompt_templates:
 
   inference:
     system: |-
-      You are an experienced paper citation analyst and you are able to determine whether a paper is impactful or not.
-      In other words, your job is to analyze if a paper is likely to be highly impactful.
+      You are an experienced paper citation analyst and you are able to determine whether a paper is impactful or not based on the content of the provided abstract.
+      In other words, your job is to analyze if a paper is likely to be highly impactful based on the content of the provided abstract.
       From past experiences, you learned a pattern.
       You need to determine whether this pattern holds for the current paper description, and also predict whether the current paper is impactful or not.
       Give an answer. The answer should be in one word, either impactful or unimpactful without any punctuation.
@@ -261,16 +261,16 @@ prompt_templates:
       Title: "${title}"
       Abstract: "${abstract}"
 
-      Given the pattern you learned above, give an answer of whether the paper above is impactful or not.
+      Given the pattern you learned above, give an answer of whether the paper above is impactful or not based on the content of the provided abstract.
       Think step by step.
       First step: Consider if the pattern can be applied to the paper.
-      Second step: Based on the pattern, is this paper impactful or not?
+      Second step: Based on the pattern, is this paper impactful or not based on the content of the provided abstract?
       Final step: give your final answer in the format of Final answer: answer without any punctuation.
 
   multiple_hypotheses_inference:
     system: |-
-      You are an experienced paper citation analyst and you are able to determine whether a paper is impactful or not.
-      In other words, your job is to analyze if a paper is likely to be highly impactful.
+      You are an experienced paper citation analyst and you are able to determine whether a paper is impactful or not based on the content of the provided abstract.
+      In other words, your job is to analyze if a paper is likely to be highly impactful based on the content of the provided abstract.
       From past experiences, you learned some patterns.
       You need to determine whether each of the patterns holds for the current paper description, and also predict whether the current paper is impactful or not.
       Give an answer. The answer should be in one word, either impactful or unimpactful without any punctuation.
@@ -282,17 +282,17 @@ prompt_templates:
       Title: "${title}"
       Abstract: "${abstract}"
 
-      Given the patterns you learned above, give an answer of whether the paper above is impactful or not.
+      Given the patterns you learned above, give an answer of whether the paper above is impactful or not based on the content of the provided abstract.
       Think step by step.
       First step: Think about which pattern can be applied to the paper.
-      Second step: Based on the pattern, is this paper impactful or not?
+      Second step: Based on the pattern, is this paper impactful or not based on the content of the provided abstract?
       Final step: give your final answer in the format of Final answer: answer without any punctuation.
   
   check_hypothesis_pair_repetition:
     system: |-
-      You are an experienced paper citation analyst and your job is to determine whether a paper is impactful or not.
+      You are an experienced paper citation analyst and your job is to determine whether a paper is impactful or not based on the content of the provided abstract.
       In other words, we want to know whether the paper is likely to be highly impactful.
-      From past experiences, you learned two hypotheses that are useful for determining whether a paper is impactful or not.
+      From past experiences, you learned two hypotheses that are useful for determining whether a paper is impactful or not based on the content of the provided abstract.
       You need to determine if the two hypotheses are so similar to the level of "repeating hypotheses".
       Finally, answer "yes" if the two hypotheses are repetitive and "no" if they are not.
       Keep your answer short.
@@ -309,10 +309,10 @@ prompt_templates:
 
   is_relevant:
     system: |-
-      You are an experienced paper citation analyst and you are able to determine whether a paper is impactful or not.
-      From past experiences, you learned a pattern about how to judge whether a paper is impactful or not.
+      You are an experienced paper citation analyst and you are able to determine whether a paper is impactful or not based on the content of the provided abstract. 
+      From past experiences, you learned a pattern about how to judge whether a paper is impactful or not based on the content of the provided abstract. 
       Now, given a new paper description, you need to determine whether this pattern is relevant or not.
-      The pattern is relevant means that one can directly apply this pattern as a heuristic to decide whether the paper is impactful or not.
+      The pattern is relevant means that one can directly apply this pattern as a heuristic to decide whether the paper is impactful or not based on the content of the provided abstract.
       In other words, a pattern is relevant to a paper means that the pattern is applicable to that paper.
       Not all patterns will be relevant to every paper. Carefully consider whether the pattern truly applies to the given paper.
       Be skeptical. It's okay and often correct to determine that a pattern is not relevant.
@@ -337,12 +337,12 @@ prompt_templates:
 
   adaptive_inference:
     system: |-
-      You are an experienced paper citation analyst and you are able to determine whether a paper is impactful or not.
+      You are an experienced paper citation analyst and you are able to determine whether a paper is impactful or not based on the content of the provided abstract.
       In other words, your job is to analyze if a paper is likely to be highly impactful.
       From past experiences, you learned some patterns.
       For each pattern, you will also see a couple of examples that worked for each pattern.
       First step: take a careful look at the examples associated with each pattern, and see which set of examples the current paper description is most similar with. Choose and repeat the pattern corresponding to that examples set.
-      Next, apply the pattern on the new sample to determine whether the new paper is impactful or not.
+      Next, apply the pattern on the new sample to determine whether the new paper is impactful or not based on the content of the provided abstract.
       Finally, give an answer. The answer should be in one word, either impactful or unimpactful without any punctuation.
       Please give your final answer in the following format:
       Reasoning for choosing pattern: reason,
@@ -351,7 +351,7 @@ prompt_templates:
       Final Answer: answer
 
     user: |-
-      Here are some previously generated patterns with some examples where it predicted correctly for whether a paper is impactful or not.
+      Here are some previously generated patterns with some examples where it predicted correctly for whether a paper is impactful or not based on the content of the provided abstract.
       ${adaptive_info_prompt}
       New paper description:
       Title: "${title}"
@@ -361,14 +361,14 @@ prompt_templates:
       Think step-by-step.
       Step 1: Look at the new paper description and compare it with the set of examples associated with each provided pattern.
       Step 2: Find the set of examples that is the most similar to the new paper description, pick and repeat the pattern associated with that set of examples.
-      Step 3: Apply the pattern you picked to the new paper description and predict whether the new paper is impactful or not.
+      Step 3: Apply the pattern you picked to the new paper description and predict whether the new paper is impactful or not based on the content of the provided abstract.
       Step 4: Give your final answer.
       Answer:
 
   adaptive_selection:
     system: |-
-      You are an experienced paper citation analyst and you are able to determine whether a paper is impactful or not.
-      In other words, your job is to analyze if a paper is likely to be highly impactful.
+      You are an experienced paper citation analyst and you are able to determine whether a paper is impactful or not based on the content of the provided abstract.
+      In other words, your job is to analyze if a paper is likely to be highly impactful based on the content of the provided abstract.
       From past experiences, you learned some patterns.
       For each pattern, you will also see a couple of examples that worked for each pattern.
       Take a careful look at the examples associated with each pattern, and see which set of examples the current paper description is most similar with.
@@ -377,7 +377,7 @@ prompt_templates:
       Chosen Pattern: Pattern <number>.
 
     user: |-
-      Here are some previously generated patterns with some examples where it predicted correctly for whether a paper is impactful or not.
+      Here are some previously generated patterns with some examples where it predicted correctly for whether a paper is impactful or not based on the content of the provided abstract.
       ${adaptive_info_prompt}
       New paper description:
       Title: "${title}"
