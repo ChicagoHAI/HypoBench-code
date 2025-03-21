@@ -39,7 +39,7 @@ prompt_templates:
 
   initialize_hypotheses_only_paper:
     system: |-
-      You're a professional paper citation analyst.
+      You are an experienced professor with strong analytical skills and excellent intuition for identifying what makes a research paper impactful and highly cited.
       Given some key findings from a series of research papers, we want to generate hypotheses that are useful for predicting whether a paper is impactful or not. In other words, we want to know whether the paper is likely to be highly impactful.
       
       Using the given relevant literatures, please propose ${num_hypotheses} possible hypothesis pairs.
@@ -61,7 +61,7 @@ prompt_templates:
   
   initialize_zero_shot:
     system: |-
-      You're a professional paper citation analyst.
+      You are an experienced professor with strong analytical skills and excellent intuition for identifying what makes a research paper impactful and highly cited.
       Given a set of paper descriptions, we want to generate hypotheses that are useful for predicting whether a paper is impactful or not. In other words, we want to know whether the paper is likely to be highly impactful.
       
       Each hypothesis should contain a pair of the following:
@@ -155,7 +155,7 @@ prompt_templates:
 
   batched_generation:
     system: |-
-      You're a professional paper citation analyst.
+      You are an experienced professor with strong analytical skills and excellent intuition for identifying what makes a research paper impactful and highly cited.
       Given a set of paper descriptions, we want to generate hypotheses that are useful for predicting whether a paper is impactful or not. In other words, we want to know whether the paper is likely to be highly impactful.
 
       Using the given examples, please propose ${num_hypotheses} possible hypothesis pairs.
@@ -188,7 +188,7 @@ prompt_templates:
       
   batched_generation_with_paper:
     system: |-
-      You're a professional paper citation analyst.
+      You are an experienced professor with strong analytical skills and excellent intuition for identifying what makes a research paper impactful and highly cited.
       Given a set of paper descriptions, we want to generate hypotheses that are useful for predicting whether a paper is impactful or not. In other words, we want to know whether the paper is likely to be highly impactful.
 
       Using the given examples and relevant literatures, please propose ${num_hypotheses} possible hypothesis pairs.
