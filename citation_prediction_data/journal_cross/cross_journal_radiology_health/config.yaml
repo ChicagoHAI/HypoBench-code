@@ -39,7 +39,7 @@ prompt_templates:
 
   initialize_hypotheses_only_paper:
     system: |-
-      You're a an experienced bibliometrician.
+      You're an experienced paper citation analyst.
       Given some key findings from a series of research papers, we want to generate hypotheses that are useful for predicting whether a paper is impactful or not. In other words, we want to know whether the paper is likely to be highly impactful.
       
       Using the given relevant literatures, please propose ${num_hypotheses} possible hypothesis pairs.
@@ -61,7 +61,7 @@ prompt_templates:
   
   initialize_zero_shot:
     system: |-
-      You're a an experienced bibliometrician.
+      You're an experienced paper citation analyst.
       Given a set of paper descriptions, we want to generate hypotheses that are useful for predicting whether a paper is impactful or not. In other words, we want to know whether the paper is likely to be highly impactful.
       
       Each hypothesis should contain a pair of the following:
@@ -77,7 +77,7 @@ prompt_templates:
 
   refine_with_data:
     system: |-
-      You're a an experienced bibliometrician working on a project to identify impactful research papers.
+      You're an experienced paper citation analyst working on a project to identify impactful research papers.
       Given a set of paper descriptions, we want to generate hypotheses that are useful for predicting whether a paper is impactful or not. In other words, we want to know whether the paper is likely to be highly impactful.
       
       Using the given examples, refine the hypothesis pairs provided.
@@ -101,7 +101,7 @@ prompt_templates:
 
   refine_with_literature:
     system: |-
-      You're a an experienced bibliometrician working on a project to identify impactful research papers.
+      You're an experienced paper citation analyst working on a project to identify impactful research papers.
       Given a set of paper descriptions, we want to generate hypotheses that are useful for predicting whether a paper is impactful or not. In other words, we want to know whether the paper is likely to be highly impactful.
       
       Using the given relevant literatures, refine the hypothesis pairs provided.
@@ -125,7 +125,7 @@ prompt_templates:
 
   boost_specificity:
     system: |-
-      You're a an experienced bibliometrician working on a project to identify impactful research papers.
+      You're an experienced paper citation analyst working on a project to identify impactful research papers.
       Given a set of paper descriptions, we want to generate hypotheses that are useful for predicting whether a paper is impactful or not. In other words, we want to know whether the paper is likely to be highly impactful.
       From past experiences, you learned a hypothesis for deciding whether a paper is impactful or not.
       Now you need to refine the hypothesis by rephrasing the pattern or adding real-life examples to it so it can be more specific and easier to be used.
@@ -140,7 +140,7 @@ prompt_templates:
 
   balance_specificity:
     system: |-
-      You're a an experienced bibliometrician working on a project to identify impactful research papers.
+      You're an experienced paper citation analyst working on a project to identify impactful research papers.
       Given a set of paper descriptions, we want to generate hypotheses that are useful for predicting whether a paper is impactful or not. In other words, we want to know whether the paper is likely to be highly impactful.
       From past experiences, you learned a hypothesis for deciding whether a paper is impactful or not.
       Now you need to refine the hypothesis by rephrasing the pattern or deleting real-life examples from it so it can be more balanced and easier to be used.
@@ -155,7 +155,7 @@ prompt_templates:
 
   batched_generation:
     system: |-
-      You're a an experienced bibliometrician.
+      You're an experienced paper citation analyst.
       Given a set of paper descriptions, we want to generate hypotheses that are useful for predicting whether a paper is impactful or not. In other words, we want to know whether the paper is likely to be highly impactful.
 
       Using the given examples, please propose ${num_hypotheses} possible hypothesis pairs.
@@ -188,7 +188,7 @@ prompt_templates:
       
   batched_generation_with_paper:
     system: |-
-      You're a an experienced bibliometrician.
+      You're an experienced paper citation analyst.
       Given a set of paper descriptions, we want to generate hypotheses that are useful for predicting whether a paper is impactful or not. In other words, we want to know whether the paper is likely to be highly impactful.
 
       Using the given examples and relevant literatures, please propose ${num_hypotheses} possible hypothesis pairs.
@@ -231,7 +231,7 @@ prompt_templates:
 
   few_shot_baseline:
     system: |-
-      You are a an experienced bibliometrician agent and want to determine whether a paper is impactful or not.
+      You are an experienced paper citation analyst agent and want to determine whether a paper is impactful or not.
       In other words, we want to know whether the paper is likely to be highly impactful.
       You need to determine whether this pattern holds for the current paper description, and also predict whether the current paper is impactful or not.
       Give an answer. The answer should be in one word, either impactful or unimpactful without any punctuation.
@@ -248,7 +248,7 @@ prompt_templates:
 
   inference:
     system: |-
-      You are a an experienced bibliometrician and you are able to determine whether a paper is impactful or not.
+      You are an experienced paper citation analyst and you are able to determine whether a paper is impactful or not.
       In other words, your job is to analyze if a paper is likely to be highly impactful.
       From past experiences, you learned a pattern.
       You need to determine whether this pattern holds for the current paper description, and also predict whether the current paper is impactful or not.
@@ -269,7 +269,7 @@ prompt_templates:
 
   multiple_hypotheses_inference:
     system: |-
-      You are a an experienced bibliometrician and you are able to determine whether a paper is impactful or not.
+      You are an experienced paper citation analyst and you are able to determine whether a paper is impactful or not.
       In other words, your job is to analyze if a paper is likely to be highly impactful.
       From past experiences, you learned some patterns.
       You need to determine whether each of the patterns holds for the current paper description, and also predict whether the current paper is impactful or not.
@@ -290,7 +290,7 @@ prompt_templates:
   
   check_hypothesis_pair_repetition:
     system: |-
-      You are a an experienced bibliometrician and your job is to determine whether a paper is impactful or not.
+      You are an experienced paper citation analyst and your job is to determine whether a paper is impactful or not.
       In other words, we want to know whether the paper is likely to be highly impactful.
       From past experiences, you learned two hypotheses that are useful for determining whether a paper is impactful or not.
       You need to determine if the two hypotheses are so similar to the level of "repeating hypotheses".
@@ -309,7 +309,7 @@ prompt_templates:
 
   is_relevant:
     system: |-
-      You are a an experienced bibliometrician and you are able to determine whether a paper is impactful or not.
+      You are an experienced paper citation analyst and you are able to determine whether a paper is impactful or not.
       From past experiences, you learned a pattern about how to judge whether a paper is impactful or not.
       Now, given a new paper description, you need to determine whether this pattern is relevant or not.
       The pattern is relevant means that one can directly apply this pattern as a heuristic to decide whether the paper is impactful or not.
@@ -337,7 +337,7 @@ prompt_templates:
 
   adaptive_inference:
     system: |-
-      You are a an experienced bibliometrician and you are able to determine whether a paper is impactful or not.
+      You are an experienced paper citation analyst and you are able to determine whether a paper is impactful or not.
       In other words, your job is to analyze if a paper is likely to be highly impactful.
       From past experiences, you learned some patterns.
       For each pattern, you will also see a couple of examples that worked for each pattern.
@@ -367,7 +367,7 @@ prompt_templates:
 
   adaptive_selection:
     system: |-
-      You are a an experienced bibliometrician and you are able to determine whether a paper is impactful or not.
+      You are an experienced paper citation analyst and you are able to determine whether a paper is impactful or not.
       In other words, your job is to analyze if a paper is likely to be highly impactful.
       From past experiences, you learned some patterns.
       For each pattern, you will also see a couple of examples that worked for each pattern.
