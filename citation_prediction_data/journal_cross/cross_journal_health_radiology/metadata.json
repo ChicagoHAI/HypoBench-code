@@ -1,0 +1,43 @@
+{
+    "meta": {
+        "journals": [
+            "Health Affairs"
+        ],
+        "year_start": 2010,
+        "year_end": 2016,
+        "percentage": 10.0,
+        "years_after": 2,
+        "save_path": "./data",
+        "download_date": "2025-03-04",
+        "final_data_count_split": {
+            "Health Affairs": {
+                "2010": 54,
+                "2011": 40,
+                "2012": 50,
+                "2013": 42,
+                "2014": 42,
+                "2015": 38,
+                "2016": 40
+            }
+        },
+        "filtered_data_count_split": {
+            "Health Affairs": {
+                "2010": 408,
+                "2011": 386,
+                "2012": 414,
+                "2013": 350,
+                "2014": 356,
+                "2015": 351,
+                "2016": 362
+            }
+        },
+        "total_data_count": 306
+    },
+    "task_description": "The task is to predict whether a paper will be highly cited or not. The dataset contains papers from a list of academic journals or conferences, and the goal is to predict whether a paper will be in the top or bottom percentile of citations after a specified number of years. The dataset includes the title, abstract, and publication year of each paper, along with a label indicating whether the paper is in the top or bottom percentile of citations after a specified number of years. ",
+    "feature_description": {
+        "id": "Unique identifier for the research paper",
+        "title": "Title of the research paper",
+        "abstract": "Abstract of the research paper",
+        "high_impact": "Whether the research paper is in the top percentile or bottom percentile of citations after a specified number of years, with 1 indicating top percentile and 0 indicating bottom percentile"
+    }
+}
