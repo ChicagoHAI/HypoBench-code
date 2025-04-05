@@ -169,10 +169,16 @@
     "num_impactful_feature": 1,
     "label_flipping_ratio": 0,
     "weight_dropout_ratio": 0,
-    "gt_hypotheses": ["If the \"policy_stance\" of the given tweet is \"advocates for universal healthcare\", then it is likely to be classified as \"likely democratic voter\" and unlikely to be classified as \"likely republican voter\".", "If the \"policy_stance\" of the given tweet is \"opposes tax cuts for corporations\", then it is likely to be classified as \"likely republican voter\" and unlikely to be classified as \"likely third-party/abstain voter\".", "If the \"policy_stance\" of the given tweet is \"supports immigration reform\", then it is likely to be classified as \"likely republican voter\" and unlikely to be classified as \"likely democratic voter\".", "If the \"policy_stance\" of the given tweet is \"endorses climate change initiatives\", then it is a bit unlikely to be classified as \"likely democratic voter\" and highly unlikely to be classified as \"likely republican voter\".", "If the \"policy_stance\" of the given tweet is \"champions gun rights\", then it is likely to be classified as \"likely democratic voter\" and unlikely to be classified as \"likely third-party/abstain voter\"."],
     "dataset_size": {
         "train": 1750,
         "val": 249,
         "test": 501
-    }
+    },
+    "ground_truth_hypotheses": [
+        "If the \"policy_stance\" of the given tweet is \"advocates for universal healthcare\", then it is likely to be classified as \"likely democratic voter\" and unlikely to be classified as \"likely republican voter\".",
+        "If the \"policy_stance\" of the given tweet is \"opposes tax cuts for corporations\", then it is likely to be classified as \"likely republican voter\" and unlikely to be classified as \"likely third-party/abstain voter\".",
+        "If the \"policy_stance\" of the given tweet is \"supports immigration reform\", then it is likely to be classified as \"likely republican voter\" and unlikely to be classified as \"likely democratic voter\".",
+        "If the \"policy_stance\" of the given tweet is \"endorses climate change initiatives\", then it is a bit unlikely to be classified as \"likely democratic voter\" and highly unlikely to be classified as \"likely republican voter\".",
+        "If the \"policy_stance\" of the given tweet is \"champions gun rights\", then it is likely to be classified as \"likely democratic voter\" and unlikely to be classified as \"likely third-party/abstain voter\"."
+    ]
 }

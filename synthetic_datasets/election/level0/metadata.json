@@ -169,12 +169,12 @@
     "num_impactful_feature": 1,
     "label_flipping_ratio": 0,
     "weight_dropout_ratio": 0,
-    "gt_hypotheses": [
-        "If the \"political_event_reaction\" of the given tweet is \"expresses frustration over lack of third-party debate presence\", then it is likely to be classified as \"likely third-party/abstain voter\" and unlikely to be classified as \"likely democratic voter\"."
-    ],
     "dataset_size": {
         "train": 1750,
         "val": 249,
         "test": 501
-    }
+    },
+    "ground_truth_hypotheses": [
+        "If the \"political_event_reaction\" of the given tweet is \"expresses frustration over lack of third-party debate presence\", then it is likely to be classified as \"likely third-party/abstain voter\" and unlikely to be classified as \"likely democratic voter\"."
+    ]
 }
