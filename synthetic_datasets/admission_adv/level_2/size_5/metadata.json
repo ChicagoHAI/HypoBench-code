@@ -1,0 +1,93 @@
+{
+    "task_name": "Student Admission Prediction",
+    "task_type": "classification",
+    "task_description": "Predict whether a student will be admitted to a university based on their academic performance. This is a simplified version focusing on math grades.",
+    "difficulty_level": 2,
+    "difficulty_description": "Multi-feature disjunctive decision rule",
+    "features": {
+        "math": {
+            "type": "categorical",
+            "description": "Student's grade in Mathematics",
+            "possible_values": [
+                "A",
+                "B",
+                "C",
+                "D",
+                "F"
+            ]
+        },
+        "publications": {
+            "type": "numerical",
+            "description": "Number of published papers",
+            "possible_values": [
+                0,
+                1,
+                2,
+                3,
+                4
+            ]
+        },
+        "recommendation_letters": {
+            "type": "numerical",
+            "description": "Number of recommendation letters",
+            "possible_values": [
+                0,
+                1,
+                2,
+                3
+            ]
+        },
+        "extracurricular": {
+            "type": "numerical",
+            "description": "Number of strong extracurricular activities",
+            "possible_values": [
+                0,
+                1,
+                2,
+                3
+            ]
+        },
+        "english": {
+            "type": "categorical",
+            "description": "Student's grade in English",
+            "possible_values": [
+                "A",
+                "B",
+                "C",
+                "D",
+                "F"
+            ]
+        }
+    },
+    "labels": {
+        "admission_base": {
+            "type": "binary",
+            "values": [
+                "admitted",
+                "rejected"
+            ],
+            "description": "Final admission decision"
+        }
+    },
+    "dataset_sizes": {
+        "train": 200,
+        "validation": 200,
+        "test": 200
+    },
+    "ground_truth_hypotheses": [
+        "A student will be admitted if they have an F in Math.",
+        "A student will be admitted if they have 0 publications.",
+        "A student will be admitted if they have 0 recommendation letters.",
+        "A student will be admitted if they have 0 strong activities.",
+        "A student will be admitted if they have an A or D or F in English."
+    ],
+    "task_properties": {
+        "underlying_model": "decision_tree",
+        "balanced": true,
+        "noise_level": 0,
+        "true_num_hypotheses": 5,
+        "distractor": 0,
+        "depth": 1,
+        "abstraction": null
+    }
+}

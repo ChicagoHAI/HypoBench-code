@@ -7,6 +7,7 @@ declare -A METHOD_PATHS
 # Evaluation model
 MODEL_TYPE="gpt"
 MODEL_NAME="gpt-4o"
+# MODEL_NAME="gpt-4o-mini"
 MODEL_PATH=""
 
 # Model to evaluate
@@ -48,8 +49,8 @@ TASKS=(
     # "preference/level3_nosubtlety"
     # "election/level4_nosubtlety"
     # "preference/level4_nosubtlety"
-    "election/level5_nosubtlety"
-    "preference/level5_nosubtlety"
+    # "election/level5_nosubtlety"
+    # "preference/level5_nosubtlety"
     # 'election_controlled/5_0_0'
     # 'election_controlled/10_0_0'
     # 'election_controlled/15_0_0'
@@ -63,6 +64,27 @@ TASKS=(
     # 'election_controlled/20_0.1_0.1'
     # 'election_controlled/20_0.2_0.2'
     # 'election_controlled/20_0.3_0.3'
+    # 'preference_controlled/5_0_0'
+    # 'preference_controlled/10_0_0'
+    # 'preference_controlled/15_0_0'
+    # 'preference_controlled/20_0_0'
+    # 'preference_controlled/20_0.1_0'
+    # 'preference_controlled/20_0.2_0'
+    # 'preference_controlled/20_0.3_0'
+    # 'preference_controlled/20_0_0.1'
+    # 'preference_controlled/20_0_0.2'
+    # 'preference_controlled/20_0_0.3'
+    # 'preference_controlled/20_0.1_0.1'
+    # 'preference_controlled/20_0.2_0.2'
+    # 'preference_controlled/20_0.3_0.3'
+    # 'admission/level_3/depth_3'
+    # 'admission/level_3/distractor_6'
+    # 'admission/level_3/noise_20'
+    # 'admission/level_3/size_10'
+    # 'admission/level_4/depth_4'
+    # 'admission/level_4/distractor_10'
+    # 'admission/level_4/noise_30'
+    # 'admission/level_4/size_15'
 )
 
 HYPOGEN_PATH_PREFIX="/home/haokunliu/hypothesis-generation"

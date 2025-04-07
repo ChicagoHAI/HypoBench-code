@@ -10,21 +10,24 @@ MODEL_NAME="gpt-4o"
 MODEL_PATH=""
 
 # Model to evaluate
-# MODEL_TO_EVAL="gpt-4o-mini"
+MODEL_TO_EVAL="gpt-4o-mini"
 # MODEL_TO_EVAL="meta-llama/Meta-Llama-3.1-70B-Instruct"
 # MODEL_TO_EVAL="Qwen/Qwen2.5-72B-Instruct"
-MODEL_TO_EVAL="DeepSeek/DeepSeek-R1-Distill-Llama-70B-local"
+# MODEL_TO_EVAL="DeepSeek/DeepSeek-R1-Distill-Llama-70B-local"
 HYP_SIZE=20
 
 # Define tasks
 TASKS=(
-    "deceptive_reviews"
-    "llamagc_detect"
-    "gptgc_detect"
-    "persuasive_pairs"
-    "dreaddit"
-    "headline_binary"
-    "retweet"
+    # "deceptive_reviews"
+    # "llamagc_detect"
+    # "gptgc_detect"
+    # "persuasive_pairs"
+    # "dreaddit"
+    # "headline_binary"
+    # "retweet"
+    "journal_same/same_journal_health"
+    "journal_same/same_journal_nips"
+    "journal_same/same_journal_radiology"
 )
 
 HYPOGENIC_COMMON_PATH="hypotheses_training_sample_final_seed_42_epoch_0.json"
