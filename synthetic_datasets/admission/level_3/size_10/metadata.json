@@ -1,0 +1,148 @@
+{
+    "task_name": "Student Admission Prediction",
+    "task_type": "classification",
+    "task_description": "Predict whether a student will be admitted to a university based on their profile. This dataset corresponds to size_10 in level_3.",
+    "difficulty_level": 3,
+    "features": {
+        "math": {
+            "type": "categorical",
+            "description": "Student's grade in Mathematics",
+            "possible_values": [
+                "A",
+                "B",
+                "C",
+                "D",
+                "F"
+            ]
+        },
+        "science": {
+            "type": "categorical",
+            "description": "Student's grade in Science",
+            "possible_values": [
+                "A",
+                "B",
+                "C",
+                "D",
+                "F"
+            ]
+        },
+        "history": {
+            "type": "categorical",
+            "description": "Student's grade in History",
+            "possible_values": [
+                "A",
+                "B",
+                "C",
+                "D",
+                "F"
+            ]
+        },
+        "art": {
+            "type": "categorical",
+            "description": "Student's grade in Art",
+            "possible_values": [
+                "A",
+                "B",
+                "C",
+                "D",
+                "F"
+            ]
+        },
+        "applied_major": {
+            "type": "categorical",
+            "description": "The major the student applied for",
+            "possible_values": [
+                "Science",
+                "Medicine",
+                "Engineering",
+                "Arts",
+                "Business",
+                "Law"
+            ]
+        },
+        "first_generation_college": {
+            "type": "boolean",
+            "description": "Whether the student is a first-generation college student"
+        },
+        "attendance_rate": {
+            "type": "numerical",
+            "description": "Student's attendance rate as a percentage"
+        },
+        "leadership_roles": {
+            "type": "numerical",
+            "description": "Number of leadership roles held by the student"
+        },
+        "community_service_hours": {
+            "type": "numerical",
+            "description": "Number of community service hours completed by the student"
+        },
+        "volunteer_projects": {
+            "type": "numerical",
+            "description": "Number of volunteer projects completed by the student"
+        },
+        "family_wealth_index": {
+            "type": "numerical",
+            "description": "Family wealth index of the student"
+        },
+        "donated_to_school": {
+            "type": "boolean",
+            "description": "Whether the student's family donated to the school"
+        },
+        "academic_integrity_violation": {
+            "type": "boolean",
+            "description": "Whether the student has any academic integrity violations"
+        },
+        "criminal_record": {
+            "type": "boolean",
+            "description": "Whether the student has a criminal record"
+        },
+        "legacy_status": {
+            "type": "boolean",
+            "description": "Whether the student is a legacy applicant"
+        },
+        "faculty_family_member": {
+            "type": "boolean",
+            "description": "Whether the student is a family member of a faculty member"
+        },
+        "num_publications": {
+            "type": "numerical",
+            "description": "Number of publications authored by the student"
+        }
+    },
+    "labels": {
+        "admission_size_10": {
+            "type": "binary",
+            "values": [
+                "admitted",
+                "rejected"
+            ],
+            "description": "Final admission decision"
+        }
+    },
+    "dataset_sizes": {
+        "train": 200,
+        "validation": 200,
+        "test": 200
+    },
+    "ground_truth_hypotheses": [
+        "A student will be admitted if they applied to Science, Medicine, or Engineering, AND their Math grade is A or B, AND their Science grade is A.",
+        "A student will be admitted if they applied to Arts, Business, or Law, AND their History grade is A or B, AND their Art grade is A or B.",
+        "A student will be admitted if they are a first-generation college student AND their attendance rate is greater than 85%.",
+        "A student will be admitted if they have more than 2 leadership roles AND their community service hours are greater than 30.",
+        "A student will be admitted if they have more than 3 volunteer projects AND their attendance rate is greater than 90%.",
+        "A student will be admitted if their family wealth index is greater than 8 AND they donated to the school.",
+        "A student will be admitted if they have no academic integrity violations AND no criminal record.",
+        "A student will be admitted if they are a legacy student AND their Math grade is A or B.",
+        "A student will be admitted if they are a faculty family member AND their attendance rate is greater than 95%.",
+        "A student will be admitted if they applied to Medicine AND their Science grade is A AND they have more than 1 publication."
+    ],
+    "task_properties": {
+        "underlying_model": "decision_tree",
+        "balanced": true,
+        "noise_level": 0,
+        "true_num_hypotheses": 10,
+        "distractor": 0,
+        "depth": null,
+        "abstraction": null
+    }
+}

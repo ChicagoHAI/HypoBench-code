@@ -1,0 +1,273 @@
+task_name: dreaddit
+
+train_data_path: ./dreaddit_ind_train.json
+val_data_path: ./dreaddit_ind_val.json
+test_data_path: ./dreaddit_ind_test.json
+ood_data_path: ./dreaddit_ood.json
+prompt_templates:
+  observations:
+    multi_content: |
+      A reddit post is the following: "${text}"
+      The poster's stress status is: ${label}.
+    
+  adaptive_info_prompt:
+    multi_content: |
+      Pattern ${idx}: ${hypothesis_text}
+      ${observations}
+    
+  few_shot_prefix: |
+    We have seen some reddit posts:
+
+  relevant_papers:
+    multi_content: |
+      Title: ${title}
+      Key Findings: ${summary}
+  
+  summarize_paper:
+    system: |-
+      You are a helpful assistant for summarizing key findings in research papers on a given topic.
+    user: |-
+      Summarize the following research paper, focusing ONLY on this question: What is useful for one to judge whether a reddit poster has stress based on one of their reddit post content?
+      Focus on hypotheses of what kind of posts indicate stress, do not include technical details in the paper. 
+      Title: ${title}
+      Text: 
+      ${paper_text}
+
+  initialize_hypotheses_only_paper:
+    system: |-
+      You're a psychologist and social scientist studying people's stress and their online posts.
+      Given some key findings from a series of research papers, we want to generate hypotheses that are useful for deciding people's stress status (has stress or no stress) based on reddit post.
+
+      Using the given relevant literatures, please propose ${num_hypotheses} possible hypothesis pairs.
+      These hypotheses should identify specific patterns that occur across the provided posts.
+
+      Each hypothesis should contain a pair of the following:
+      a. A hypothesis about what makes the post more likely to indicate that the poster has stress
+      b. The opposite hypothesis about what makes the post more likely to indicate that the poster does not have stress
+
+      Generate them in the format of 1. [hypothesis], 2. [hypothesis], ... ${num_hypotheses}. [hypothesis].
+      The hypotheses should analyze what kind of posts are likely to indicate stress or no stress.
+    user: |-
+      We have some key findings from a series of research papers that might be useful for generating the required ${num_hypotheses} hypotheses:
+      ${relevant_papers}
+      Please generate hypotheses that are useful for deciding people's stress status (has stress or no stress) based on reddit post.
+      Propose ${num_hypotheses} possible hypotheses. Remember to generate ${num_hypotheses} hypotheses! Generate them in the format of 1. [hypothesis], 2. [hypothesis], ... ${num_hypotheses}. [hypothesis].
+      Proposed hypotheses:
+  
+  initialize_zero_shot:
+    system: |-
+      You're a psychologist and social scientist studying people's stress and their online posts.
+      We want to generate hypotheses that are useful for deciding people's stress status (has stress or no stress) based on reddit post.
+
+      Each hypothesis should contain a pair of the following:
+      a. A hypothesis about what makes the post more likely to indicate that the poster has stress
+      b. The opposite hypothesis about what makes the post more likely to indicate that the poster does not have stress
+
+      Generate them in the format of 1. [hypothesis], 2. [hypothesis], ... ${num_hypotheses}. [hypothesis].
+      The hypotheses should analyze what kind of posts are likely to indicate stress or no stress.
+    user: |-
+      Please generate hypotheses that are useful for deciding people's stress status (has stress or no stress) based on reddit post.
+      Propose ${num_hypotheses} possible hypotheses. Remember to generate ${num_hypotheses} hypotheses! Generate them in the format of 1. [hypothesis], 2. [hypothesis], ... ${num_hypotheses}. [hypothesis].
+      Proposed hypotheses:
+
+  refine_with_data:
+    system: |-
+      You're a psychologist and social scientist working on a project to identify whether a person has stress based on reddit posts.
+      given a set of reddit posts, we want to generate hypotheses that are useful for deciding people's stress status (has stress or no stress) based on reddit post.
+
+      Using the given examples, refine the hypothesis pairs provided.
+      The desired hypotheses should identify specific patterns that occur across the provided posts.
+
+      Each hypothesis should contain a pair of the following:
+      a. A hypothesis about what makes the post more likely to indicate that the poster has stress
+      b. The opposite hypothesis about what makes the post more likely to indicate that the poster does not have stress
+
+      Generate refined hypotheses in the format of 1. [hypothesis], 2. [hypothesis], ... ${num_hypotheses}. [hypothesis].
+      The hypotheses should analyze what kind of posts are likely to indicate stress or no stress.
+    user: |-
+      We have seen some reddit posts:
+      ${observations}
+      We have some hypotheses need to be refined:
+      ${hypotheses}
+      Please refine these hypotheses to make them more specific and useful for deciding people's stress status (has stress or no stress) based on reddit post.
+      Generate refined hypotheses in the format of 1. [hypothesis], 2. [hypothesis], ... ${num_hypotheses}. [hypothesis].
+      Refined hypotheses:
+
+  refine_with_literature:
+    system: |-
+      You're a psychologist and social scientist working on a project to identify whether a person has stress based on reddit posts.
+      given a set of reddit posts, we want to generate hypotheses that are useful for deciding people's stress status (has stress or no stress) based on reddit post.
+
+      Using the given relevant literatures, refine the hypothesis pairs provided.
+      The desired hypotheses should identify specific patterns that occur across the provided posts.
+
+      Each hypothesis should contain a pair of the following:
+      a. A hypothesis about what makes the post more likely to indicate that the poster has stress
+      b. The opposite hypothesis about what makes the post more likely to indicate that the poster does not have stress
+
+      Generate refined hypotheses in the format of 1. [hypothesis], 2. [hypothesis], ... ${num_hypotheses}. [hypothesis].
+      The hypotheses should analyze what kind of posts are likely to indicate stress or no stress.
+    user: |-
+      We have some key findings from a series of research papers that might be useful for generating hypotheses:
+      ${relevant_papers}
+      We have some hypotheses need to be refined:
+      ${hypotheses}
+      Please refine these hypotheses to make them more specific and useful for deciding people's stress status (has stress or no stress) based on reddit post.
+      Generate refined hypotheses in the format of 1. [hypothesis], 2. [hypothesis], ... ${num_hypotheses}. [hypothesis].
+      Refined hypotheses:
+
+  boost_specificity:
+    system: |-
+      You're a psychologist and social scientist working on a project to identify whether a person has stress based on reddit posts.
+      given a set of reddit posts, we want to generate hypotheses that are useful for deciding people's stress status (has stress or no stress) based on reddit post.
+      From past experiences, you learned a hypothesis for deciding whether the poster of a reddit post has stress or not based on the content of the post.
+      Now you need to refine the hypothesis by rephrasing the pattern or adding real-life examples to it so it can be more specific and easier to be used.
+      Generate the refined hypothesis in the format of 1. [hypothesis].
+      The hypotheses should analyze what kind of posts are likely to indicate stress or no stress.
+    user: |-
+      This is the hypothesis to be refined:
+      ${hypotheses}
+      Please refine the hypothesis by rephrasing the pattern or adding real-life examples to it so it can be more specific and easier to be used.
+      Generate the refined hypothesis in the format of 1. [hypothesis].
+      Refined hypothesis:
+
+  balance_specificity:
+    system: |-
+      You're a psychologist and social scientist working on a project to identify whether a person has stress based on reddit posts.
+      From past experiences, you learned a hypothesis for deciding whether the poster of a reddit post has stress or not based on the content of the post.
+      For the given hypothesis, you need to refine it by adding (or deleting) specific real-life examples to (or from) it, or rephrase it, so that it has the length of around 70 words and is more applicable in real life.
+      Generate the refined hypothesis in the format of 1. [hypothesis].
+      The hypotheses should analyze what kind of posts are likely to indicate stress or no stress.
+    user: |-
+      This is the hypothesis to be refined:
+      ${hypotheses}
+      Please refine it by adding (or deleting) specific real-life examples to (or from) it, or rephrase it, so that it has the length of around 70 words and is more applicable in real life.
+      Remember that you need to keep it around 70 words, if it's too long, try shorten it without changing the key information.
+      Also, if there are sections marked with Refine, integrate everything into ONE hypothesis (and also keep it around 70 words)
+      Generate the refined hypothesis in the format of 1. [hypothesis].
+      Refined hypothesis:
+
+  batched_generation:
+    system: |-
+      You're a psychologist and social scientist studying people's stress and their online posts.
+      given a set of reddit posts, we want to generate hypotheses that are useful for deciding people's stress status (has stress or no stress) based on reddit post.
+
+      Using the given examples, please propose ${num_hypotheses} possible hypothesis pairs.
+      These hypotheses should identify specific patterns that occur across the provided posts.
+
+      Each hypothesis should contain a pair of the following:
+      a. A hypothesis about what makes the post more likely to indicate that the poster has stress
+      b. The opposite hypothesis about what makes the post more likely to indicate that the poster does not have stress
+
+      Generate them in the format of 1. [hypothesis], 2. [hypothesis], ... ${num_hypotheses}. [hypothesis].
+      The hypotheses should analyze what kind of posts are likely to indicate stress or no stress.
+
+    user: |-
+      We have seen some reddit posts:
+      ${observations}
+      Please generate hypotheses that are useful for deciding people's stress status (has stress or no stress) based on reddit post.
+      Propose ${num_hypotheses} possible hypotheses. Generate them in the format of 1. [hypothesis], 2. [hypothesis], ... ${num_hypotheses}. [hypothesis].
+      Proposed hypotheses:
+
+  IO_refine_with_feedback:
+    system: |-
+      
+    user: |-
+      Applying your rule to the following inputs does not produce the expected outputs.
+      Here's your proposed hypothesis: ${hypothesis_text}
+      Below is some examples that you predicted wrong using the hypothesis.
+      ${observations}
+      Please generate new hypotheses that maps the given inputs to their corresponding outputs.
+      Propose ${num_hypotheses} possible hypotheses. Generate them in the format of 1. [hypothesis], 2. [hypothesis], ... ${num_hypotheses}. [hypothesis].
+      
+  batched_generation_with_paper:
+    system: |-
+      You're a psychologist and social scientist studying people's stress and their online posts.
+      given a set of reddit posts, we want to generate hypotheses that are useful for deciding people's stress status (has stress or no stress) based on reddit post.
+
+      Using the given examples and relevant literatures, please propose ${num_hypotheses} possible hypothesis pairs.
+      These hypotheses should identify specific patterns that occur across the provided posts.
+
+      Each hypothesis should contain a pair of the following:
+      a. A hypothesis about what makes the post more likely to indicate that the poster has stress
+      b. The opposite hypothesis about what makes the post more likely to indicate that the poster does not have stress
+
+      Generate them in the format of 1. [hypothesis], 2. [hypothesis], ... ${num_hypotheses}. [hypothesis].
+      The hypotheses should analyze what kind of posts are likely to indicate stress or no stress.
+
+    user: |-
+      We have some key findings from a series of research papers that might be useful for generating hypotheses:
+      ${relevant_papers}
+      We have seen some reddit posts:
+      ${observations}
+      Please generate hypotheses that are useful for deciding people's stress status (has stress or no stress) based on reddit post.
+      Propose ${num_hypotheses} possible hypotheses. Generate them in the format of 1. [hypothesis], 2. [hypothesis], ... ${num_hypotheses}. [hypothesis].
+      Proposed hypotheses:
+
+  few_shot_baseline:
+    system: |-
+      You're a psychologist and social scientist working on a project to identify whether a person has stress based on reddit posts.
+      You will be given a reddit post, and you should determine if the poster has stress or not.
+      Give an answer. The answer should be "has stress" or "no stress".
+      Give your final answer in the format of {Final answer: answer}, where answer is "has stress" or "no stress".
+
+    user: |-
+      ${observations}
+      New reddit post:
+      A reddit post is the following: "${text}"
+
+      Does the poster of this reddit post has stress or not? Answer should be "has stress" or "no stress".
+      Answer: (Give your final answer in the format of {Final answer: answer})
+
+  inference:
+    system: |-
+      You're a psychologist and social scientist working on a project to identify whether a person has stress based on reddit posts.
+      From past experiences, you learned a pattern. 
+      You need to determine whether each of the patterns holds for the current reddit post, and also predict whether the poster of the reddit post has stress or not based on the content of the post.
+      Give an answer. The answer should be "has stress" or "no stress".
+      Give your final answer in the format of {Final answer: answer}
+
+    user: |-
+      Our learned patterns: ${hypothesis}                          
+      A reddit post is the following: "${text}"
+
+      Given the pattern you learned above, give an answer of whether the poster of the reddit post has stress or not based on the content of the post.
+      Think step by step.
+      First step: Consider if the pattern can be applied to the reddit post.
+      Second step: Based on the pattern, does the poster of a reddit post has stress or not? Answer should be "has stress" or "no stress".
+      Final step: give your final answer in the format of {Final answer: answer}
+
+  multiple_hypotheses_inference:
+    system: |-
+      You're a psychologist and social scientist working on a project to identify whether a person has stress based on reddit posts.
+      From past experiences, you learned some patterns. 
+      You need to determine whether each of the patterns holds for the current reddit post, and also predict whether the poster of the reddit post has stress or not based on the content of the post.
+      Give an answer. The answer should be "has stress" or "no stress".
+      Give your final answer in the format of {Final answer: answer}
+    user: |-
+      Our learned patterns: ${hypotheses}                          
+      A reddit post is the following: "${text}"
+
+      Given the pattern you learned above, give an answer of whether the poster of the reddit post has stress or not based on the content of the post.
+      Think step by step.
+      First step: Think about which pattern can be applied to the reddit post.
+      Second step: Based on the pattern, does the poster of a reddit post has stress or not? Answer should be "has stress" or "no stress".
+      Final step: give your final answer in the format of {Final answer: answer}
+  
+  check_hypothesis_pair_repetition:
+    system: |-
+      You're a psychologist and social scientist working on a project to identify whether a person has stress based on reddit posts.
+      From past experiences, you learned two hypotheses that are useful for determining whether the poster of a reddit post has stress or not based on the content of the post.
+      You need to determine if the two hypotheses are so similar to the level of "repeating hypotheses".
+      Finally, answer "yes" if the two hypotheses are repetitive and "no" if they are not.
+      Keep your answer short.
+      Give your final answer in the format of "Final answer: [answer]".
+    user: |-
+      We have two hypotheses that need you to determine if they are repetitive:
+      ${hypotheses}
+      Are these two hypotheses so similar to the level that they are repetitive? 
+      If the both of them can provide significantly more information than only one of them could, and the information is important and useful for deciding people's stress status (has stress or no stress) based on reddit post., they should not be considered repetitive.
+      Note that adding specific examples does not count as "provide significantly more information".
+      Give a short explanation of your decision.
+      Then give your final answer in the format of "Final answer: [answer]".
+      Your answer:

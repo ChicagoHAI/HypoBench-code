@@ -1,0 +1,349 @@
+task_name: headline_binary
+
+train_data_path: ./headline_binary_train.json
+# No validation data for headline binary task
+val_data_path: ./headline_binary_test.json
+test_data_path: ./headline_binary_test.json
+ood_data_path: ./headline_binary_ood.json
+
+prompt_templates:
+  observations:
+    multi_content: |
+      Headline 1: ${headline_1}
+      Headline 2: ${headline_2}
+      Observation: ${label}
+
+  adaptive_info_prompt:
+    multi_content: |
+      Pattern ${idx}: ${hypothesis_text}
+      ${observations}
+    
+  few_shot_prefix: |
+    Here are some previous examples to help you.
+  batched_generation:
+    system: |-
+      You are a professional writer for an online newspaper company. 
+      Given a pair of headlines created for the same article, you are asked to determine which will get more clicks. It is likely that the pair of headlines shares similarities, so please focus on their differences. 
+      What difference in two headlines leads to more clicks on one than the other?
+      You will be given a set of observations of the format:
+      Headline 1: [headline]
+      Headline 2: [headline]
+      Observation: [observation].
+      Based on the observations, please generate hypotheses that are useful for explaining why one headline out of the pair gets more clicked than the other.
+      These hypotheses should identify patterns, phrases, wordings etc. that occur across the provided examples. They should also be generalizable to new instances.
+      Please propose ${num_hypotheses} possible hypotheses and generate them in the format of 1. [hypothesis], 2. [hypothesis], ... ${num_hypotheses}. [hypothesis].
+
+    user: |-
+      Here are the Observations:
+      ${observations}
+
+      Please generate hypotheses that can help determine which headlines have more clicks.
+      Please propose ${num_hypotheses} possible hypotheses.
+
+      Generate them in the format of 1. [hypothesis], 2. [hypothesis], ... ${num_hypotheses}. [hypothesis]. 
+
+      Proposed hypotheses:
+
+  IO_refine_with_feedback:
+    system: |-
+      
+    user: |-
+      Applying your rule to the following inputs does not produce the expected outputs.
+      Here's your proposed hypothesis: ${hypothesis_text}
+      Below is some examples that you predicted wrong using the hypothesis.
+      ${observations}
+      Please generate new hypotheses that maps the given inputs to their corresponding outputs.
+      Propose ${num_hypotheses} possible hypotheses. Generate them in the format of 1. [hypothesis], 2. [hypothesis], ... ${num_hypotheses}. [hypothesis].
+      
+  few_shot_baseline:
+    system: |-
+      You are a writer for an online newspaper company. So you are excellent at determining which headlines are more likely to cause users to click on the article.
+      You will be given two headlines, and determine which headline was clicked more often.
+      You are only asked to give your answer.
+      The answer for the higher clicks should be of the form "Headline _" where _ is either 1 or 2. 
+      Give your final answer in the following format:
+      "Answer: Headline _"
+
+    user: |-
+      ${few_shot_prefix}${observations}
+      Which of the following headlines has more clicks:
+      Headline 1: ${headline_1}
+      Headline 2: ${headline_2}
+
+
+  inference:
+    system: |-
+      You are a professional writer for an online newspaper company. 
+      Given a pair of headlines created for the same article, you are asked to determine which will get more clicks. It is likely that the pair of headlines shares similarities, so please focus on their differences. 
+      From past experiences, you learned some patterns.
+      Now, at each time, you should apply the learned pattern to a new pair of headlines that are created for a new article and determine which headline gets clicked more.
+      The answer for the higher clicks should be in the form "Headline _" where _ is either 1 or 2.
+      Please give your final answer in the format of {Final Answer: Headline _.}
+
+    user: |-
+      Learned pattern: ${hypothesis}
+      Given the pattern you learned above, predict which of the following headlines will get more clicks:
+      Headline 1: ${headline_1}
+      Headline 2: ${headline_2}
+
+      Consider if the pattern can be applied to these headlines.
+      Think step by step.
+      Step 1: Analyze the difference between "Headline 1" and "Headline 2".
+      Step 2: Based on the pattern, which headline is likely to get more clicks?
+
+  is_relevant:
+    system: |-
+      You are a professional writer for an online newspaper company. 
+      You are excellent at determining which headlines are more likely to attract users to click on the article.
+      From past experiences, you learned a pattern about what makes some headlines more clicked than others.  
+      Now, given two headlines, you need to determine whether this pattern is relevant or not.
+      Please answer "yes" if the pattern is relevant and "no" if the pattern is not relevant.
+      Please keep you answer short (1-2 sentences).
+      Please give your final answer in the format of "Final answer: [answer].
+
+    user: |-
+      Pattern: ${hypothesis}
+      New headlines:
+      Headline 1: ${headline_1}
+      Headline 2: ${headline_2}
+
+      Answer:
+
+  adaptive_inference:
+    system: |-
+      You are a professional writer for an online newspaper company.
+      You are excellent at determining which headlines are more likely to be clicked by users.
+      From past experiences, you learned some patterns.
+      For each pattern, you will also see a couple of examples that worked for each pattern.
+      Please choose a pattern. To do this, look at the examples associated with each pattern, and find which set of the examples are closest to the given pair of headlines. 
+      Please choose the pattern corresponding to that set of examples.
+      The answer for the higher clicks should be of the form "Headline _" where _ is either 1 or 2. 
+      Please give your final answer in the following format:
+      Reasoning for choosing pattern: reason,
+      Chosen pattern: pattern,
+      Reasoning for choice of prediction: reason,
+      Final Answer: answer
+
+    user: |-
+      Here are some previously generated patterns with some examples where it predicted which one of the pair of headlines got more clicks.
+      ${adaptive_info_prompt}
+      Which one out of the following pair of headlines will get more clicks?
+      Headline 1: ${headline_1}
+      Headline 2: ${headline_2}
+
+      Think step by step.
+      Step 1: Look at the new pair of headlines and compare them with the examples associated with each pattern.
+      Step 2: Find the set of examples that is closest to the given pair of headlines, and pick the pattern associated with that set of examples.
+      Step 3: Apply the picked pattern to the new pair of headlines. Based on that pattern, think about which one out of the pair of headlines will get more clicks.
+      Step 4: Give your final answer.
+
+  adaptive_selection:
+    system: |-
+      You are a professional writer for an online newspaper company. 
+      Given a pair of headlines created for the same article, you are asked to determine which will get more clicks. It is likely that the pair of headlines shares similarities, so please focus on their differences. 
+      From past experiences, you learned some patterns.
+      For each pattern, you will also see a couple of examples that worked for each pattern.
+      Please choose a pattern for the new pair of headlines. To do this, look at the examples associated with each pattern, and find which set of the examples are closest to the given pair of headlines. And then choose the pattern corresponding to that set of examples.
+      Please give your final answer in the following format:
+      Reasoning for choosing pattern: reason,
+      Chosen Pattern: Pattern <number>.
+
+    user: |-
+      Here are some previously generated patterns with some examples where they predicted the proper headline with more clicks.
+      ${adaptive_info_prompt}
+      New pair of headlines:
+      Headline 1: ${headline_1}
+      Headline 2: ${headline_2}
+
+      Think step by step.
+      Step 1: Analyze the difference between "Headline 1" and "Headline 2".
+      Step 2: Find the set of examples that is closest to the given pair of headlines, and pick the pattern associated with that set of examples.
+
+  relevant_papers:
+    multi_content: |
+      Title: ${title}
+      Key Findings: ${summary}
+      
+  summarize_paper:
+    system: |-
+      You are a helpful assistant for summarizing key findings in research papers on a given topic.
+    user: |-
+      Summarize the following research paper, focusing ONLY on this question: What is useful for one to decide which headline will get more clicks in real life? 
+      Focus on hypotheses of what kind of headlines tend to get more clicks, do not include technical details in the paper. 
+      Title: ${title}
+      Text: 
+      ${paper_text}
+
+  initialize_hypotheses_only_paper:
+    system: |-
+      You're a professional writer for an online newspaper company.
+      Given some key findings from a series of research papers, we want to generate hypotheses that are useful for predicting which headline out of a pair of headlines will get more clicks. 
+      Please note that the paired headlines are created for the same article, so you should focus on the wording difference between them.
+
+      Using the given relevant literatures, please propose ${num_hypotheses} possible hypotheses.
+      These hypotheses should identify specific patterns that occur across the provided headlines.
+      Generate them in the format of 1. [hypothesis], 2. [hypothesis], ... ${num_hypotheses}. [hypothesis].
+
+    user: |-
+      We have some key findings from a series of research papers that might be useful for generating the required ${num_hypotheses} hypotheses:
+      ${relevant_papers}
+      Please generate hypotheses that are useful for predicting which headline will get more clicks. 
+      When generating hypotheses, remember not to overuse your own knowledge. Always refer to the key findings from research papers provided. Directly cite passages in the key findings when generating a hypothesis.
+      Propose ${num_hypotheses} possible hypotheses. Remember to generate ${num_hypotheses} hypotheses! Generate them in the format of 1. [hypothesis], 2. [hypothesis], ... ${num_hypotheses}. [hypothesis].
+      Proposed hypotheses:
+
+  initialize_zero_shot:
+    system: |-
+      You're a professional writer for an online newspaper company.
+      We want to generate hypotheses that are useful for predicting which headline out of a pair of headlines will get more clicks.
+      Please note that the paired headlines are created for the same article, so you should focus on the wording difference between them.
+      Generate them in the format of 1. [hypothesis], 2. [hypothesis], ... ${num_hypotheses}. [hypothesis].
+      The hypotheses should analyze what kind of headlines are likely to get more clicks.
+
+    user: |-
+      Please generate hypotheses that are useful for predicting which headline will get more clicks.
+      Propose ${num_hypotheses} possible hypotheses. Remember to generate ${num_hypotheses} hypotheses! Generate them in the format of 1. [hypothesis], 2. [hypothesis], ... ${num_hypotheses}. [hypothesis].
+      Proposed hypotheses:
+
+  refine_with_data:
+    system: |-
+      You're a professional writer working on a project to understand what makes headlines get more clicks.
+      Given a set of headline pairs, we want to generate hypotheses that are useful for predicting which headline will get more clicks.
+      Please note that the paired headlines are created for the same article, so you should focus on the wording difference between them.
+
+      Using the given examples, refine the hypotheses provided.
+      The desired hypotheses should identify specific patterns that occur across the provided headline pairs.
+      Generate refined hypotheses in the format of 1. [hypothesis], 2. [hypothesis], ... ${num_hypotheses}. [hypothesis].
+      The hypotheses should analyze what kind of headlines are likely to get more clicks.
+
+    user: |-
+      We have seen some headline pairs:
+      ${observations}
+      We have some hypotheses need to be refined:
+      ${hypotheses}
+      Please refine these hypotheses to make them more specific and useful for predicting which headline will get more clicks. 
+      When refining the hypotheses, feel free to change the key information or topic of a hypothesis based on the provided prevailing patterns in data if you think it is necessary.
+      Generate refined hypotheses in the format of 1. [hypothesis], 2. [hypothesis], ... ${num_hypotheses}. [hypothesis].
+      Refined hypotheses:
+
+  refine_with_literature:
+    system: |-
+      You're a professional writer working on a project to understand what makes headlines get more clicks.
+      Given a set of headline pairs, we want to generate hypotheses that are useful for predicting which headline will get more clicks.
+      Please note that the paired headlines are created for the same article, so you should focus on the wording difference between them.
+
+      Using the given relevant literatures, refine the hypotheses provided.
+      The desired hypotheses should identify specific patterns that occur across the provided headline pairs.
+      Generate refined hypotheses in the format of 1. [hypothesis], 2. [hypothesis], ... ${num_hypotheses}. [hypothesis].
+      The hypotheses should analyze what kind of headlines are likely to get more clicks.
+
+    user: |-
+      We have some key findings from a series of research papers that might be useful for generating hypotheses:
+      ${relevant_papers}
+      We have some hypotheses need to be refined:
+      ${hypotheses}
+      Please refine these hypotheses to make them more specific and useful for predicting which headline will get more clicks. 
+      When refining the hypotheses, feel free to change the key information or topic of a hypothesis based on the provided key findings if you think it is necessary.
+      Generate refined hypotheses in the format of 1. [hypothesis], 2. [hypothesis], ... ${num_hypotheses}. [hypothesis].
+      Refined hypotheses:
+
+  boost_specificity:
+    system: |-
+      You're a professional writer working on a project to understand what makes headlines get more clicks.
+      Given a set of headline pairs, we want to generate hypotheses that are useful for predicting which headline will get more clicks.
+      Please note that the paired headlines are created for the same article, so you should focus on the wording difference between them.
+      From past experiences, you learned a hypothesis for deciding which headline will get more clicks. 
+      Now you need to refine the hypothesis by rephrasing the pattern or adding real-life examples to it so it can be more specific and easier to be used.
+      Generate the refined hypothesis in the format of 1. [hypothesis].
+      The hypotheses should analyze what kind of headlines are likely to get more clicks.
+
+    user: |-
+      This is the hypothesis to be refined:
+      ${hypotheses}
+      Please refine the hypothesis by rephrasing the pattern or adding real-life examples to it so it can be more specific and easier to be used.
+      Generate the refined hypothesis in the format of 1. [hypothesis].
+      Refined hypothesis:
+
+  balance_specificity:
+    system: |-
+      You're a professional writer working on a project to understand what makes headlines get more clicks.
+      From past experiences, you learned a hypothesis for deciding which headline will get more clicks. 
+      For the given hypothesis, you need to refine it by adding (or deleting) specific real-life examples to (or from) it so that it has the length of around 40 words.
+      Generate the refined hypothesis in the format of 1. [hypothesis].
+      The hypotheses should analyze what kind of headlines are likely to get more clicks.
+
+    user: |-
+      This is the hypothesis to be refined:
+      ${hypotheses}
+      Please refine it by adding (or deleting) specific real-life examples to (or from) it so that it has the length of around 45 words.
+      Generate the refined hypothesis in the format of 1. [hypothesis].
+      Refined hypothesis:
+
+  check_hypothesis_pair_repetition:
+    system: |-
+      You are a professional writer for an online newspaper company. 
+      From past experiences, you learned two hypotheses that are useful for determining which headline will get more clicks.
+      You need to determine if the two hypotheses are so similar to the level of "repeating hypotheses".
+      Finally, answer "yes" if the two hypotheses are repetitive and "no" if they are not.
+      Keep your answer short.
+      Give your final answer in the format of "Final answer: [answer]".
+
+    user: |-
+      We have two hypotheses that need you to determine if they are repetitive:
+      ${hypotheses}
+      Are these two hypotheses so similar to the level that they are repetitive? If the both of them can provide significantly more information than only one of them could, and the information is important and useful for predicting which headline will get more clicks, they should not be considered repetitive.
+      Note that adding specific examples does not count as "provide significantly more information".
+      Give a short explanation of your decision.
+      Then give your final answer in the format of "Final answer: [answer]".
+      Your answer:
+
+  multiple_hypotheses_inference:
+    system: |-
+      You are a professional writer for an online newspaper company.
+      Given a pair of headlines created for the same article, you are asked to determine which will get more clicks.
+      From past experiences, you learned some patterns. 
+      You need to determine whether each of the patterns holds for the current headlines, and also predict which headline will get more clicks.
+      Give your final answer in the format of {Final answer: Headline _}
+
+    user: |-
+      Our learned patterns: ${hypotheses}
+      Headline 1: ${headline_1}
+      Headline 2: ${headline_2}
+
+      Given the patterns you learned above, predict which headline will get more clicks.
+      Think step by step.
+      First step: Think about which patterns can be applied to these headlines.
+      Second step: Based on the applicable patterns, which headline is likely to get more clicks?
+      Final step: Give your final answer in the format of {Final answer: Headline _}
+
+  test_autogen:
+    system: |-
+      
+    user: |-
+      Welcome, social_scientist and psychologist. Please discuss and debate on what makes headlines get more clicks, with the end goal being to generate ${num_hypotheses} hypotheses that are useful for predicting which headline will get more clicks.
+      We have some key findings from some research papers that might be useful:
+      ${relevant_papers}
+      Also we have seen some pairs of headlines:
+      ${observations}
+      Here are the instructions of your discussion:
+      1. If you are the first one to speak, based on your role, use your expert domain knowledge to generate ${num_hypotheses} hypotheses in the format of 1. [hypothesis], 2. [hypothesis], ... ${num_hypotheses}. [hypothesis].
+         Remember to generate the hypotheses from your perspective as an expert in your domain, not an average person.    
+      2. If you are not the first one to speak, refine each of the previous speaker's hypotheses based on your expert domain knowledge.
+
+  batched_generation_with_paper:
+    system: |-
+      You are a professional writer for an online newspaper company.
+      Given a set of headline pairs, we want to generate hypotheses that are useful for predicting which headline will get more clicks.
+      Using the given examples and relevant literatures, please propose ${num_hypotheses} possible hypotheses.
+      These hypotheses should identify specific patterns that occur across the provided headlines.
+      Please propose ${num_hypotheses} possible hypotheses in the format of 1. [hypothesis], 2. [hypothesis], ... ${num_hypotheses}. [hypothesis].
+
+    user: |-
+      We have some key findings from research papers:
+      ${relevant_papers}
+      We have seen some pairs of headlines:
+      ${observations}
+      Please generate hypotheses that are useful for predicting which headline will get more clicks.
+      When generating hypotheses, make sure to utilize information both from the key findings of papers and the patterns in data.
+      Propose ${num_hypotheses} possible hypotheses in the format specified above.
+      Proposed hypotheses:

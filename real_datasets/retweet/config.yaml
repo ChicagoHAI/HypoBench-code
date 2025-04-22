@@ -1,0 +1,356 @@
+task_name: retweet
+
+train_data_path: ./retweet_train.json
+val_data_path: ./retweet_val.json
+test_data_path: ./retweet_test.json
+ood_data_path: ./retweet_ood.json
+
+prompt_templates:
+  observations:
+    multi_content: |
+      The first tweet: ${first_tweet}
+      The second tweet: ${second_tweet}
+      Final answer: The ${label} tweet got more retweets.
+  adaptive_info_prompt:
+    multi_content: |
+      Pattern ${idx}: ${hypothesis_text}
+      ${observations}
+  few_shot_prefix: |
+    Here are some examples:
+  batched_generation:
+    system: |-
+      You are a social media expert. You are an expert at determining which tweet will be retweeted more.
+      Given a set of observations, you want to generation hypotheses that will help predict which tweet out of a pair of tweets is more likely to be retweeted.
+      Please note that the paired tweets are about the same content and are posted by the same user, so you should focus on the wording difference between the two tweets in each pair.
+      Please propose ${num_hypotheses} possible hypotheses.
+      Please generate them in the format of: 
+      1. [hypothesis] 
+      2. [hypothesis] 
+      ... 
+      ${num_hypotheses}. [hypothesis].
+      Please make the hypotheses general enough to be applicable to new observations.
+
+    user: |-
+      We made some observations:
+      ${observations}
+      Generate hypotheses that are useful for predicting which tweet out of a pair of tweets is more likely to be retweeted.
+      Please note that the paired tweets are about the same content and are posted by the same user, so you should focus on the wording difference between the two tweets in each pair.
+      Please propose ${num_hypotheses} possible hypotheses. 
+      Please generate them in the format of: 
+      1. [hypothesis] 
+      2. [hypothesis] 
+      ... 
+      ${num_hypotheses}. [hypothesis].
+      Proposed hypotheses:
+
+  IO_refine_with_feedback:
+    system: |-
+      
+    user: |-
+      Applying your rule to the following inputs does not produce the expected outputs.
+      Here's your proposed hypothesis: ${hypothesis_text}
+      Below is some examples that you predicted wrong using the hypothesis.
+      ${observations}
+      Please generate new hypotheses that maps the given inputs to their corresponding outputs.
+      Propose ${num_hypotheses} possible hypotheses. Generate them in the format of 1. [hypothesis], 2. [hypothesis], ... ${num_hypotheses}. [hypothesis].
+      
+  few_shot_baseline:
+    system: |-
+      Instruction: 
+      You are a social media expert.
+      Given two tweets, you are asked to predict which tweet will attract more retweets.
+      Give your final answer in the format of "Final answer: [the _ tweet got more retweet]." 
+
+    user: |-
+      ${few_shot_prefix}${observations}
+      New tweets:
+      The first tweet: ${first_tweet}
+      The second tweet: ${second_tweet}
+
+      Which one of the two tweets will get more retweets?
+
+  inference:
+    system: |-
+      You are a social media expert.
+      Given a pair of tweets, you are asked to predict which tweet will be retweeted more.
+      Please note that the paired tweets are about the same content and are posted by the same user, so you should focus on the wording difference between the two tweets.
+      From past experiences, you learned a pattern.
+      Now, at each time, you should apply a learned pattern to a pair of tweets and determine which one will get more retweets. 
+      The answer for the higher retweets should be of the form "the _ tweet" where _ is either first or second. 
+      Please give your final answer in the format of {Final answer: the _ tweet}
+
+    user: |-
+      Pattern: ${hypothesis}
+      The first tweet: ${first_tweet}
+      The second tweet: ${second_tweet}
+
+      Given the pattern you learned above, predict which one of the two tweets will get more retweets.
+      Think step by step.
+      First step: Consider if the pattern can be applied to the tweets.
+      Second step: Analyze the textual difference between the two tweets.
+      Third step: Based on the pattern, which tweet is more likely to get more retweets?
+      Final step: Give your final answer in the format of {Final answer: the _ tweet}
+      Final answer:
+
+  is_relevant:
+    system: |-
+      You are a social media expert.
+      You are an expert at predicting which tweet our of a pair of tweets will be retweeted more.
+      Please note that the paired tweets are about the same content and are posted by the same user, so you should focus on the wording difference between the two tweets.
+      From past experiences, you learned a pattern.
+      Now, given a pair of tweets, you need to determine whether this pattern is relevant or not.
+      Please answer "yes" if the pattern is relevant and "no" if the pattern is not relevant.
+      Please keep you answer short (1-2 sentences).
+      Please give your final answer in the format of {Final answer: answer}.
+
+    user: |-
+      Pattern: ${hypothesis}
+      New tweets:
+      The first tweet: ${first_tweet}
+      The second tweet: ${second_tweet}
+
+      Is the given pattern relevant to the two tweets above?
+
+  adaptive_inference:
+    system: |-
+      You are a social media expert.
+      Given a pair of tweets, you are asked to predict which tweet will be retweeted more.
+      Please note that the paired tweets are about the same content and are posted by the same user, so you should focus on the wording difference between the two tweets.
+      From past experiences, you learned some patterns.
+      You should apply a learned pattern to a pair of tweets and determine which one will get more retweets. 
+      For each pattern, you will also see a couple of examples that worked for each pattern.
+      Please choose a pattern. To do this, look at the examples associated with each pattern, and find which set of the examples are closest to the given pair of tweets. 
+      Please choose the pattern corresponding to that set of examples.
+      The answer for the higher retweets should be of the form "the _ tweet" where _ is either first or second. 
+      Please give your final answer in the following format:
+      Reasoning for choosing pattern: reason,
+      Chosen pattern: pattern,
+      Reasoning for choice of prediction: reason,
+      Final Answer: answer
+
+    user: |-
+      Here are some previously generated patterns with some examples where it predicted which tweet will will be retweeted more.
+      ${adaptive_info_prompt}
+      New tweets:
+      The first tweet: ${first_tweet}
+      The second tweet: ${second_tweet}
+
+      Which one of the two tweets will get more retweets?
+      Think step by step.
+      Step 1: Look at the new pair of tweets and compare them with the examples associated with each pattern.
+      Step 2: Find the set of examples that is closest to the given pair of tweets, and pick the pattern associated with that set of examples.
+      Step 3: Analyze the textual difference between the two tweets.
+      Step 4: Apply the picked pattern to the new pair of tweets. Based on that pattern, think about which one out of the pair of headlines will get more clicks.
+      Step 5: Give your final answer.
+
+  adaptive_selection:
+    system: |-
+      You are a social media expert.
+      You are an expert at predicting which tweet our of a pair of tweets will be retweeted more.
+      From past experiences, you learned some patterns.
+      For each pattern, you will also see a couple of examples that worked for each pattern.
+      Please choose a pattern for the new pair of tweets. To do this, look at the examples associated with each pattern, and find which set of the examples are closest to the given pair of tweets. And then choose the pattern corresponding to that set of examples.
+      Please give your final answer in the following format:
+      Reasoning for choosing pattern: reason,
+      Chosen Pattern: Pattern <number>.
+
+    user: |-
+      Here are some previously generated patterns with some examples where it predicted which tweet will will be retweeted more.
+      ${adaptive_info_prompt}
+      New tweets:
+      The first tweet: ${first_tweet}
+      The second tweet: ${second_tweet}
+
+      Which one of the two tweets will get more retweets?
+      Think step by step.
+      Step 1: Analyze the difference between the first tweet and the second tweet.
+      Step 2: Find the set of examples that is closest to the given pair of tweets, and pick the pattern associated with that set of examples.
+
+  relevant_papers:
+    multi_content: |
+      Title: ${title}
+      Key Findings: ${summary}
+
+  summarize_paper:
+    system: |-
+      You are a helpful assistant for summarizing key findings in research papers on a given topic.
+    user: |-
+      Summarize the following research paper, focusing ONLY on this question: What is useful for one to decide which tweet is more likely to get retweeted in real life? 
+      Focus on hypotheses of what kind of tweets tend to get more retweets, do not include technical details in the paper. 
+      Title: ${title}
+      Text: 
+      ${paper_text}
+
+  initialize_hypotheses_only_paper:
+    system: |-
+      You're a professional social media analyst.
+      Given some key findings from a series of research papers, we want to generate hypotheses that are useful for predicting which tweet out of a pair of tweets will get more retweets.
+      Please note that the paired tweets are about the same content and are posted by the same user, so you should focus on the wording difference between the two tweets.
+
+      Using the given relevant literatures, please propose ${num_hypotheses} possible hypotheses.
+      These hypotheses should identify specific patterns that occur across the provided tweets.
+      Generate them in the format of 1. [hypothesis], 2. [hypothesis], ... ${num_hypotheses}. [hypothesis].
+
+    user: |-
+      We have some key findings from a series of research papers that might be useful for generating the required ${num_hypotheses} hypotheses:
+      ${relevant_papers}
+      Please generate hypotheses that are useful for predicting which tweet will get more retweets. 
+      When generating hypotheses, remember not to overuse your own knowledge. Always refer to the key findings from research papers provided. Directly cite passages in the key findings when generating a hypothesis.
+      Propose ${num_hypotheses} possible hypotheses. Remember to generate ${num_hypotheses} hypotheses! Generate them in the format of 1. [hypothesis], 2. [hypothesis], ... ${num_hypotheses}. [hypothesis].
+      Proposed hypotheses:
+
+  initialize_zero_shot:
+    system: |-
+      You're a professional social media analyst.
+      We want to generate hypotheses that are useful for predicting which tweet out of a pair of tweets will get more retweets.
+      Please note that the paired tweets are about the same content and are posted by the same user, so you should focus on the wording difference between the two tweets.
+      Generate them in the format of 1. [hypothesis], 2. [hypothesis], ... ${num_hypotheses}. [hypothesis].
+      The hypotheses should analyze what kind of tweets are likely to get more retweets.
+
+    user: |-
+      Please generate hypotheses that are useful for predicting which tweet will get more retweets.
+      Propose ${num_hypotheses} possible hypotheses. Remember to generate ${num_hypotheses} hypotheses! Generate them in the format of 1. [hypothesis], 2. [hypothesis], ... ${num_hypotheses}. [hypothesis].
+      Proposed hypotheses:
+
+  refine_with_data:
+    system: |-
+      You're a social scientist working on a project to understand what makes tweets get more retweets.
+      Given a set of tweet pairs, we want to generate hypotheses that are useful for predicting which tweet will get more retweets.
+      Please note that the paired tweets are about the same content and are posted by the same user, so you should focus on the wording difference between the two tweets.
+
+      Using the given examples, refine the hypotheses provided.
+      The desired hypotheses should identify specific patterns that occur across the provided tweet pairs.
+      Generate refined hypotheses in the format of 1. [hypothesis], 2. [hypothesis], ... ${num_hypotheses}. [hypothesis].
+      The hypotheses should analyze what kind of tweets are likely to get more retweets.
+
+    user: |-
+      We have seen some tweet pairs:
+      ${observations}
+      We have some hypotheses need to be refined:
+      ${hypotheses}
+      Please refine these hypotheses to make them more specific and useful for predicting which tweet will get more retweets. 
+      When refining the hypotheses, feel free to change the key information or topic of a hypothesis based on the provided prevailing patterns in data if you think it is necessary.
+      Generate refined hypotheses in the format of 1. [hypothesis], 2. [hypothesis], ... ${num_hypotheses}. [hypothesis].
+      Refined hypotheses:
+
+  refine_with_literature:
+    system: |-
+      You're a social scientist working on a project to understand what makes tweets get more retweets.
+      Given a set of tweet pairs, we want to generate hypotheses that are useful for predicting which tweet will get more retweets.
+      Please note that the paired tweets are about the same content and are posted by the same user, so you should focus on the wording difference between the two tweets.
+
+      Using the given relevant literatures, refine the hypotheses provided.
+      The desired hypotheses should identify specific patterns that occur across the provided tweet pairs.
+      Generate refined hypotheses in the format of 1. [hypothesis], 2. [hypothesis], ... ${num_hypotheses}. [hypothesis].
+      The hypotheses should analyze what kind of tweets are likely to get more retweets.
+
+    user: |-
+      We have some key findings from a series of research papers that might be useful for generating hypotheses:
+      ${relevant_papers}
+      We have some hypotheses need to be refined:
+      ${hypotheses}
+      Please refine these hypotheses to make them more specific and useful for predicting which tweet will get more retweets. 
+      When refining the hypotheses, feel free to change the key information or topic of a hypothesis based on the provided key findings if you think it is necessary.
+      Generate refined hypotheses in the format of 1. [hypothesis], 2. [hypothesis], ... ${num_hypotheses}. [hypothesis].
+      Refined hypotheses:
+
+  boost_specificity:
+    system: |-
+      You're a social scientist working on a project to understand what makes tweets get more retweets.
+      Given a set of tweet pairs, we want to generate hypotheses that are useful for predicting which tweet will get more retweets.
+      Please note that the paired tweets are about the same content and are posted by the same user, so you should focus on the wording difference between the two tweets.
+      From past experiences, you learned a hypothesis for deciding which tweet will get more retweets. 
+      Now you need to refine the hypothesis by rephrasing the pattern or adding real-life examples to it so it can be more specific and easier to be used.
+      Generate the refined hypothesis in the format of 1. [hypothesis].
+      The hypotheses should analyze what kind of tweets are likely to get more retweets.
+
+    user: |-
+      This is the hypothesis to be refined:
+      ${hypotheses}
+      Please refine the hypothesis by rephrasing the pattern or adding real-life examples to it so it can be more specific and easier to be used.
+      Generate the refined hypothesis in the format of 1. [hypothesis].
+      Refined hypothesis:
+
+  balance_specificity:
+    system: |-
+      You're a social scientist working on a project to understand what makes tweets get more retweets.
+      From past experiences, you learned a hypothesis for deciding which tweet will get more retweets. 
+      For the given hypothesis, you need to refine it by adding (or deleting) specific real-life examples to (or from) it so that it has the length of around 40 words.
+      Generate the refined hypothesis in the format of 1. [hypothesis].
+      The hypotheses should analyze what kind of tweets are likely to get more retweets.
+
+    user: |-
+      This is the hypothesis to be refined:
+      ${hypotheses}
+      Please refine it by adding (or deleting) specific real-life examples to (or from) it so that it has the length of around 45 words.
+      Generate the refined hypothesis in the format of 1. [hypothesis].
+      Refined hypothesis:
+
+  check_hypothesis_pair_repetition:
+    system: |-
+      You are a professional social media analyst and your job is to determine which tweet will get more retweets.
+      From past experiences, you learned two hypotheses that are useful for determining which tweet will get more retweets.
+      You need to determine if the two hypotheses are so similar to the level of "repeating hypotheses".
+      Finally, answer "yes" if the two hypotheses are repetitive and "no" if they are not.
+      Keep your answer short.
+      Give your final answer in the format of "Final answer: [answer]".
+
+    user: |-
+      We have two hypotheses that need you to determine if they are repetitive:
+      ${hypotheses}
+      Are these two hypotheses so similar to the level that they are repetitive? If the both of them can provide significantly more information than only one of them could, and the information is important and useful for predicting which tweet will get more retweets, they should not be considered repetitive.
+      Note that adding specific examples does not count as "provide significantly more information".
+      Give a short explanation of your decision.
+      Then give your final answer in the format of "Final answer: [answer]".
+      Your answer:
+
+  multiple_hypotheses_inference:
+    system: |-
+      You are a social media expert. 
+      Given a pair of tweets, you are asked to determine which will get more retweets.
+      From past experiences, you learned some patterns. 
+      You need to determine whether each of the patterns holds for the current pair of tweets, and also predict which tweet will get more retweets.
+      Give your final answer in the format of {Final answer: the _ tweet}
+
+    user: |-
+      Our learned patterns: ${hypotheses}
+      The first tweet: ${first_tweet}
+      The second tweet: ${second_tweet}
+
+      Given the patterns you learned above, predict which one will get more retweets.
+      Think step by step.
+      First step: Think about which patterns can be applied to these tweets.
+      Second step: Based on the applicable patterns, which tweet is likely to get more retweets?
+      Final step: Give your final answer in the format of {Final answer: the _ tweet}
+
+  test_autogen:
+    system: |-
+      
+    user: |-
+      Welcome, social_scientist and psychologist. Please discuss and debate on what makes tweets get more retweets, with the end goal being to generate ${num_hypotheses} hypotheses that are useful for predicting which tweet will get more retweets.
+      We have some key findings from some research papers that might be useful:
+      ${relevant_papers}
+      Also we have seen some pairs of tweets:
+      ${observations}
+      Here are the instructions of your discussion:
+      1. If you are the first one to speak, based on your role, use your expert domain knowledge to generate ${num_hypotheses} hypotheses in the format of 1. [hypothesis], 2. [hypothesis], ... ${num_hypotheses}. [hypothesis].
+         Remember to generate the hypotheses from your perspective as an expert in your domain, not an average person.    
+      2. If you are not the first one to speak, refine each of the previous speaker's hypotheses based on your expert domain knowledge.
+
+  batched_generation_with_paper:
+    system: |-
+      You are a social media expert. 
+      Given a set of tweet pairs, we want to generate hypotheses that are useful for predicting which tweet will get more retweets.
+      Using the given examples and relevant literatures, please propose ${num_hypotheses} possible hypotheses.
+      These hypotheses should identify specific patterns that occur across the provided tweets.
+      Please propose ${num_hypotheses} possible hypotheses in the format of 1. [hypothesis], 2. [hypothesis], ... ${num_hypotheses}. [hypothesis].
+
+    user: |-
+      We have some key findings from research papers:
+      ${relevant_papers}
+      We have seen some pairs of tweets:
+      ${observations}
+      Please generate hypotheses that are useful for predicting which tweet will get more retweets.
+      When generating hypotheses, make sure to utilize information both from the key findings of papers and the patterns in data.
+      Propose ${num_hypotheses} possible hypotheses in the format specified above.
+      Proposed hypotheses:
