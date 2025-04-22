@@ -11,10 +11,10 @@ MODEL_NAME="gpt-4o"
 MODEL_PATH=""
 
 # Model to evaluate
-# MODEL_TO_EVAL="gpt-4o-mini"
+MODEL_TO_EVAL="gpt-4o-mini"
 # MODEL_TO_EVAL="meta-llama/Meta-Llama-3.1-70B-Instruct"
 # MODEL_TO_EVAL="Qwen/Qwen2.5-72B-Instruct"
-MODEL_TO_EVAL="DeepSeek/DeepSeek-R1-Distill-Llama-70B-local"
+# MODEL_TO_EVAL="DeepSeek/DeepSeek-R1-Distill-Llama-70B-local"
 HYP_SIZE=20
 
 # Define tasks
@@ -85,10 +85,25 @@ TASKS=(
     # 'admission/level_4/distractor_10'
     # 'admission/level_4/noise_30'
     # 'admission/level_4/size_15'
+    # "admission_adv/level_1/base"
+    # "admission_adv/level_2/depth_2"
+    # "admission_adv/level_2/distractor_3"
+    # "admission_adv/level_2/noise_10"
+    # "admission_adv/level_2/size_5"
+    # 'admission_adv/level_3/depth_3'
+    # 'admission_adv/level_3/distractor_6'
+    # 'admission_adv/level_3/noise_20'
+    # 'admission_adv/level_3/size_10'
+    # 'admission_adv/level_4/depth_4'
+    # 'admission_adv/level_4/distractor_10'
+    # 'admission_adv/level_4/noise_30'
+    # 'admission_adv/level_4/size_15'
+    # 'election/counterfactual/normal'
+    # 'election/counterfactual/counterfactual'
 )
 
-HYPOGEN_PATH_PREFIX="/home/haokunliu/hypothesis-generation"
-RESULTS_DIR="${HYPOGEN_PATH_PREFIX}/results"
+HYPOGEN_PATH_PREFIX="HYP_GEN_PATH_PREFIX" # e.g. "/home/hypothesis-generation"
+RESULTS_DIR="${HYPOGEN_PATH_PREFIX}/results" 
 METADATA_BASE="${HYPOGEN_PATH_PREFIX}/data"
 
 HYPOGENIC_COMMON_PATH="hypotheses_training_sample_final_seed_42_epoch_0.json"

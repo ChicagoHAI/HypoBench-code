@@ -25,10 +25,14 @@ TASKS=(
     # "dreaddit"
     # "headline_binary"
     # "retweet"
-    "journal_same/same_journal_health"
-    "journal_same/same_journal_nips"
-    "journal_same/same_journal_radiology"
+    # "journal_same/same_journal_health"
+    # "journal_same/same_journal_nips"
+    # "journal_same/same_journal_radiology"
 )
+
+HYPOGEN_PATH_PREFIX="HYP_GEN_PATH_PREFIX" # e.g. "/home/hypothesis-generation"
+RESULTS_DIR="${HYPOGEN_PATH_PREFIX}/results" 
+METADATA_BASE="${HYPOGEN_PATH_PREFIX}/data"
 
 HYPOGENIC_COMMON_PATH="hypotheses_training_sample_final_seed_42_epoch_0.json"
 INIT_COMMON_PATH="hypotheses_training_sample_0_seed_42_epoch_0.json"
@@ -44,10 +48,6 @@ METHOD_PATHS=(
     # Add more method-path pairs as needed
 )
 
-# Base paths
-HYPOGEN_PATH_PREFIX="/home/haokunliu/hypothesis-generation"
-RESULTS_DIR="${HYPOGEN_PATH_PREFIX}/results"
-METADATA_BASE="${HYPOGEN_PATH_PREFIX}/data"
 
 # Iterate through tasks and methods
 for TASK in "${TASKS[@]}"; do
