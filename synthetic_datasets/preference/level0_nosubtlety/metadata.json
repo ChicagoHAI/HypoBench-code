@@ -63,9 +63,9 @@
     },
     
     "dataset_sizes": {
-        "train": 1750,
-        "validation": 250,
-        "test": 500
+        "train": 200,
+        "validation": 125,
+        "test": 300
     },
     
     "ground_truth_hypotheses": [
